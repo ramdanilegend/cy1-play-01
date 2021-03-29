@@ -4,11 +4,7 @@ import { AppBreadcrumbs } from "components";
 const data = [{ title: "text" }];
 
 const AnalysisResult = () => {
-  return (
-    <div>
-      <AppBreadcrumbs />
-    </div>
-  );
+  return <div>{/* <AppBreadcrumbs /> */}</div>;
 };
 
 export default AnalysisResult;
