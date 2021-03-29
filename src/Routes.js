@@ -24,7 +24,7 @@ const Routes = () => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <Redirect to="/test" />
+          <Redirect to="/analysis-result" />
         </Route>
 
         <RouteWithLayout
@@ -90,12 +90,12 @@ const Routes = () => {
           path="/user-role"
         />
 
-        <RouteWithLayout
+        {/* <RouteWithLayout
           component={TestView}
           exact
           layout={MainLayout}
           path="/test"
-        />
+        /> */}
 
         <RouteWithLayout
           component={NotFoundView}
@@ -103,7 +103,7 @@ const Routes = () => {
           layout={MinimalLayout}
           path="/not-found"
         />
-        <Redirect to="/not-found" />
+        {/* <Redirect to="/not-found" /> */}
       </Switch>
     </BrowserRouter>
   );
