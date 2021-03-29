@@ -1,12 +1,11 @@
 import React from "react";
-import { Button } from "antd";
-function Landing() {
+
+function NotFound() {
   return (
     <React.Fragment>
-      <h1>das</h1>
-      <Button>Default Button</Button>
+      <h1>404</h1>
     </React.Fragment>
   );
 }
 
-export default Landing;
+export default NotFound;

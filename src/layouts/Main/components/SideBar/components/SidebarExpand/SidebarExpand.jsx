@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 0,
   },
   button: {
-    color: colors.blueGrey[800],
+    color: "ffffff",
     padding: "10px 8px",
     justifyContent: "flex-start",
     textTransform: "none",
@@ -41,14 +41,14 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   active: {
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
     fontWeight: theme.typography.fontWeightMedium,
     "& $icon": {
-      color: theme.palette.primary.main,
+      color: theme.palette.secondary.main,
     },
   },
   title: {
-    color: colors.blueGrey[800],
+    color: "#ffffff",
     textTransform: "none",
     letterSpacing: 0,
     width: "100%",
@@ -88,21 +88,9 @@ const SidebarExpand = (props) => {
 
           <Box display="flex" justifyContent="flex-end">
             {open ? (
-              <ExpandLess
-                className={
-                  props.color === "active"
-                    ? classes.colorActive
-                    : classes.expand
-                }
-              />
+              <ExpandLess color="secondary" />
             ) : (
-              <ExpandMore
-                className={
-                  props.color === "active"
-                    ? classes.colorActive
-                    : classes.expand
-                }
-              />
+              <ExpandMore color="secondary" />
             )}
           </Box>
         </Button>

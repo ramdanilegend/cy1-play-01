@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 0,
   },
   button: {
-    color: colors.blueGrey[800],
+    color: "#ffffff",
     padding: "10px 8px",
     paddingLeft: "20px",
     justifyContent: "flex-start",
@@ -31,11 +31,12 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   active: {
-    color: theme.palette.primary.main,
+    color: "#ffffff",
     fontWeight: theme.typography.fontWeightMedium,
     "& $icon": {
-      color: theme.palette.primary.main,
+      color: "#ffffff",
     },
+    backgroundColor: "#3A4248",
   },
   padding: {
     paddingTop: 0,

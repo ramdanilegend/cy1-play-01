@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/styles";
 import { List, ListItem, Button, colors } from "@material-ui/core";
 import contextButton from "context/ButtonNavMainContext";
-import auth from "service/authService";
+
 const useStyles = makeStyles((theme) => ({
   root: {},
   item: {
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 0,
   },
   button: {
-    color: colors.blueGrey[800],
+    color: "#ffffff",
     padding: "10px 8px",
     justifyContent: "flex-start",
     textTransform: "none",
@@ -31,12 +31,12 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   active: {
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
     fontWeight: theme.typography.fontWeightMedium,
     "& $icon": {
       color: theme.palette.primary.main,
     },
-    backgroundColor: "#eeeeee",
+    backgroundColor: "#3A4248",
   },
 }));
 

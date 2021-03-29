@@ -1,24 +1,22 @@
 import React from "react";
 import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom";
+import UserManagement from "views/UserManagement/UserManagement";
 
 import { RouteWithLayout } from "./components";
 import { Main as MainLayout, Minimal as MinimalLayout } from "./layouts";
 
 import {
-  Landing as LandingView,
-  NotFound as NotFoundView,
-  Login as LoginView,
-  InputKegiatan as InputKegiatanView,
-  Pengaturan as PengaturanView,
-  Dashboard as DashboardView,
-  Register as RegisterView,
-  Welcome as WelcomeView,
-  HistoryKegiatan as HistoryKegiatanView,
-  InputKegiatanNonFisik as InputKegiatanNonFisikView,
-  HistoryKegiatanNon as HistoryKegiatanNonView,
-  HistoryKegiatanView as HistoryView,
-  HistoryKegiatanNonView as HistoryNonView,
-  SignOut,
+  NotFoundView,
+  TestView,
+  AnalysisResultView,
+  CaseManagementView,
+  GlobalSettingsView,
+  LinkAnalyticView,
+  LogView,
+  ReportManagerView,
+  SearchAnalyticView,
+  UserManagementView,
+  UserRoleView,
 } from "./views";
 
 const Routes = () => {
@@ -26,100 +24,86 @@ const Routes = () => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <Redirect to="/landing" />
+          <Redirect to="/test" />
         </Route>
+
         <RouteWithLayout
-          component={WelcomeView}
+          component={AnalysisResultView}
           exact
           layout={MainLayout}
-          path="/welcome"
-        />
-        <RouteWithLayout
-          component={InputKegiatanView}
-          exact
-          layout={MainLayout}
-          path="/input-kegiatan"
-        />
-        <RouteWithLayout
-          component={InputKegiatanNonFisikView}
-          exact
-          layout={MainLayout}
-          path="/input-kegiatan-non-fisik"
-        />
-        <RouteWithLayout
-          component={HistoryKegiatanNonView}
-          exact
-          layout={MainLayout}
-          path="/history-kegiatan-non-fisik"
-        />
-        <RouteWithLayout
-          component={LoginView}
-          exact
-          layout={MinimalLayout}
-          path="/login"
-        />
-        <RouteWithLayout
-          component={HistoryNonView}
-          exact
-          layout={MainLayout}
-          path="/history-non"
-        />
-        <RouteWithLayout
-          component={HistoryView}
-          exact
-          layout={MainLayout}
-          path="/history"
-        />
-        <RouteWithLayout
-          component={LandingView}
-          exact
-          layout={MinimalLayout}
-          path="/landing"
-        />
-        <RouteWithLayout
-          component={HistoryKegiatanView}
-          exact
-          layout={MainLayout}
-          path="/history-kegiatan"
-        />
-        <RouteWithLayout
-          component={InputKegiatanView}
-          exact
-          layout={MainLayout}
-          path="/input-kegiatan"
-        />
-        <RouteWithLayout
-          component={DashboardView}
-          exact
-          layout={MainLayout}
-          path="/dashboard"
+          path="/analysis-result"
         />
 
         <RouteWithLayout
-          component={PengaturanView}
+          component={CaseManagementView}
           exact
           layout={MainLayout}
-          path="/pengaturan"
+          path="/case-management"
         />
+
         <RouteWithLayout
-          component={RegisterView}
+          component={GlobalSettingsView}
           exact
-          layout={MinimalLayout}
-          path="/register"
+          layout={MainLayout}
+          path="/global-settings"
         />
+
         <RouteWithLayout
-          component={SignOut}
+          component={LinkAnalyticView}
           exact
-          layout={MinimalLayout}
-          path="/sign-out/675213hdsbjjsankdig6723"
+          layout={MainLayout}
+          path="/link-analytic"
         />
+
+        <RouteWithLayout
+          component={LogView}
+          exact
+          layout={MainLayout}
+          path="/log"
+        />
+
+        <RouteWithLayout
+          component={ReportManagerView}
+          exact
+          layout={MainLayout}
+          path="/report-manager"
+        />
+
+        <RouteWithLayout
+          component={SearchAnalyticView}
+          exact
+          layout={MainLayout}
+          path="/search-analytic"
+        />
+
+        <RouteWithLayout
+          component={UserManagement}
+          exact
+          layout={MainLayout}
+          path="/user-management"
+        />
+
+        <RouteWithLayout
+          component={UserRoleView}
+          exact
+          layout={MainLayout}
+          path="/user-role"
+        />
+
+        <RouteWithLayout
+          component={TestView}
+          exact
+          layout={MainLayout}
+          path="/test"
+        />
+
         <RouteWithLayout
           component={NotFoundView}
           exact
           layout={MinimalLayout}
           path="/not-found"
         />
-        {/* <Redirect to="/not-found" /> */}
+        <Redirect to="/not-found" />
       </Switch>
     </BrowserRouter>
   );

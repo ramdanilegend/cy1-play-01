@@ -21,20 +21,18 @@ import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/NotificationsOutlined";
 import InputIcon from "@material-ui/icons/Input";
 import Avatar from "@material-ui/core/Avatar";
-import Logo from "assets/img/logo.svg";
+import Logo from "assets/img/core-ui-logo.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    boxShadow: "none",
+    boxShadow: "-1px 2px 3px 1px rgba(199,196,196,0.75)",
+    backgroundColor: "#ffffff",
   },
   flexGrow: {
     flexGrow: 1,
   },
   signOutButton: {
     marginLeft: theme.spacing(1),
-  },
-  logo: {
-    backgroundColor: "#FFFFFF",
   },
 }));
 
@@ -59,9 +57,7 @@ const Topbar = (props) => {
     <AppBar {...rest} className={clsx(classes.root, className)}>
       <Toolbar>
         <RouterLink to="/">
-          <Avatar variant="rounded" className={classes.logo}>
-            <img alt="Logo" src={Logo} width="30px" height="30px" />
-          </Avatar>
+          <img alt="Logo" src={Logo} width="100px" height="auto" />
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>
@@ -83,11 +79,11 @@ const Topbar = (props) => {
           </IconButton>
         </Hidden>
         <Hidden lgUp>
-          <IconButton color="inherit" onClick={onSidebarOpen}>
+          <IconButton color="primary" onClick={onSidebarOpen}>
             <MenuIcon />
           </IconButton>
         </Hidden>
-        <Dialog
+        {/* <Dialog
           open={openLogout}
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
@@ -112,7 +108,7 @@ const Topbar = (props) => {
               </Button>
             </RouterLink>
           </DialogActions>
-        </Dialog>
+        </Dialog> */}
       </Toolbar>
     </AppBar>
   );
