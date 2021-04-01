@@ -1,19 +1,26 @@
 {
+  "homepage": "https://ramdanigit.github.io/cdr-analytic-system",
   "name": "cdr-analytic-system",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@date-io/dayjs": "^1.3.13",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@material-ui/pickers": "^3.3.10",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.3",
+    "clsx": "^1.1.1",
+    "dayjs": "^1.10.4",
     "history": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-perfect-scrollbar": "^1.5.8",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "styled-components": "^5.2.1",
     "web-vitals": "^1.1.1"
   },
   "scripts": {

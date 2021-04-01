@@ -4,17 +4,24 @@ import { ThemeProvider } from "@material-ui/styles";
 import { createBrowserHistory } from "history";
 import theme from "./theme";
 import Routes from "./routes";
-// import "./App.css";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DayUtils from "@date-io/dayjs";
 
 const browserHistory = createBrowserHistory();
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <Router history={browserHistory}>
-        <Routes />
-      </Router>
-    </ThemeProvider>
+    <React.Fragment>
+      <CssBaseline />
+      <ThemeProvider theme={theme}>
+        <Router history={browserHistory}>
+          <MuiPickersUtilsProvider utils={DayUtils}>
+            <Routes />
+          </MuiPickersUtilsProvider>
+        </Router>
+      </ThemeProvider>
+    </React.Fragment>
   );
 }
 

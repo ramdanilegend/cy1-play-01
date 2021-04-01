@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
   signOutButton: {
     marginLeft: theme.spacing(1),
   },
+  btnMenu: {
+    color: "#2E343A",
+  },
 }));
 
 const Topbar = (props) => {
@@ -79,8 +82,8 @@ const Topbar = (props) => {
           </IconButton>
         </Hidden>
         <Hidden lgUp>
-          <IconButton color="primary" onClick={onSidebarOpen}>
-            <MenuIcon />
+          <IconButton onClick={onSidebarOpen}>
+            <MenuIcon color="action" />
           </IconButton>
         </Hidden>
         {/* <Dialog

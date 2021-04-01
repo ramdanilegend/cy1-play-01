@@ -11,7 +11,7 @@ export default {
     contrastText: white,
     dark: colors.blue[900],
     // main: colors.indigo[500],
-    main: "#2E343A",
+    main: "#20A8D8",
     light: colors.indigo[100],
   },
   secondary: {
@@ -46,9 +46,15 @@ export default {
     light: colors.red[400],
   },
   text: {
-    primary: colors.blueGrey[900],
+    primary: "#2E343A",
     secondary: colors.blueGrey[600],
     link: colors.blue[600],
+  },
+  textPrimary: {
+    main: "#2E343A",
+  },
+  action: {
+    main: "#2E343A",
   },
   background: {
     default: "#F4F6F8",

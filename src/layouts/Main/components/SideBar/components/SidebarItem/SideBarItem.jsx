@@ -46,7 +46,7 @@ const CustomRouterLink = forwardRef((props, ref) => (
   </div>
 ));
 
-const SidebarNav = (props) => {
+const SidebarItem = (props) => {
   const { className, ...rest } = props;
 
   const btn = React.useContext(contextButton);
@@ -73,9 +73,8 @@ const SidebarNav = (props) => {
   );
 };
 
-SidebarNav.propTypes = {
+SidebarItem.propTypes = {
   className: PropTypes.string,
-  pages: PropTypes.array.isRequired,
 };
 
-export default SidebarNav;
+export default SidebarItem;

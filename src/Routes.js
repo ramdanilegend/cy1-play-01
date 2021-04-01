@@ -17,6 +17,7 @@ import {
   SearchAnalyticView,
   UserManagementView,
   UserRoleView,
+  SigninView,
 } from "./views";
 
 const Routes = () => {
@@ -24,7 +25,7 @@ const Routes = () => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <Redirect to="/analysis-result" />
+          <Redirect to="/cdr-analytic-system" />
         </Route>
 
         <RouteWithLayout
@@ -90,12 +91,12 @@ const Routes = () => {
           path="/user-role"
         />
 
-        {/* <RouteWithLayout
-          component={TestView}
+        <RouteWithLayout
+          component={SigninView}
           exact
-          layout={MainLayout}
-          path="/test"
-        /> */}
+          layout={MinimalLayout}
+          path="/cdr-analytic-system"
+        />
 
         <RouteWithLayout
           component={NotFoundView}

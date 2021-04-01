@@ -2,13 +2,11 @@ import React from "react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/styles";
-import { Divider, Drawer, List, ListItem, Button } from "@material-ui/core";
+import { Drawer } from "@material-ui/core";
 
 import PerfectScrollbar from "react-perfect-scrollbar";
-import DashboardIcon from "@material-ui/icons/Dashboard";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AssessmentIcon from "@material-ui/icons/Assessment";
-import RestorePageIcon from "@material-ui/icons/RestorePage";
 import AccountTreeIcon from "@material-ui/icons/AccountTree";
 import FindReplaceIcon from "@material-ui/icons/FindReplace";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
@@ -18,10 +16,6 @@ import HistoryIcon from "@material-ui/icons/History";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import "react-perfect-scrollbar/dist/css/styles.css";
-
-import AssignmentIcon from "@material-ui/icons/Assignment";
-import RestoreIcon from "@material-ui/icons/Restore";
-import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 
 import { ItemExpand, SidebarExpand, SidebarItem } from "./components";
 
@@ -38,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     height: "100%",
+    overflow: "hidden",
     padding: theme.spacing(2),
   },
   divider: {

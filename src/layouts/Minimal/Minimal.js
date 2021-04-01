@@ -32,19 +32,19 @@ const Minimal = (props) => {
 
   return (
     <div className={classes.root}>
-      <NavBar sidebarOpen={handleSidebarOpen} />
-      <contextButton.Provider
+      {/* <NavBar sidebarOpen={handleSidebarOpen} /> */}
+      {/* <contextButton.Provider
         value={{
           open: handleSidebarOpen,
           close: handleSidebarClose,
         }}
-      >
-        <Sidebar
+      > */}
+      {/* <Sidebar
           onClose={handleSidebarClose}
           open={openSidebar}
           variant="temporary"
         />
-      </contextButton.Provider>
+      </contextButton.Provider> */}
       <main className={classes.content}>{children}</main>
     </div>
   );
