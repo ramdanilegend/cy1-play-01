@@ -18,6 +18,7 @@ import {
   UserManagementView,
   UserRoleView,
   SigninView,
+  DashboardView,
 } from "./views";
 
 const Routes = () => {
@@ -96,6 +97,13 @@ const Routes = () => {
           exact
           layout={MinimalLayout}
           path="/cdr-analytic-system"
+        />
+
+        <RouteWithLayout
+          component={DashboardView}
+          exact
+          layout={MainLayout}
+          path="/dashboard"
         />
 
         <RouteWithLayout

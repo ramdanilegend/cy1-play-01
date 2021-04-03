@@ -17,7 +17,7 @@ import {
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-// import KantorPusatContext from "context/KantorPusatContext";
+import ReportContext from "context/ReportContext";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import { AppTableHead, AppDialogDelete, AppIconButton } from "components";
 
@@ -135,32 +135,20 @@ export default function TableView() {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("kode_asuransi");
   const [open, setOpen] = React.useState(false);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const dense = true;
 
+  // const alertContext = React.useContext(AlertContext);
+  const reportContext = React.useContext(ReportContext);
+  const lowercasedFilter = "";
+  const filteredData = reportContext.state;
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
-
-  const [page, setPage] = React.useState(0);
-  const dense = true;
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  // const alertContext = React.useContext(AlertContext);
-  // const kantorPusatContext = React.useContext(KantorPusatContext);
-  const lowercasedFilter = "";
-  const filteredData = [
-    {
-      result: "SA_DDMMYYYY_HHMM_MSISDN/IMSI/IMEI",
-      category: "Case Management",
-    },
-    {
-      result: "SA_DDMMYYYY_HHMM_MSISDN/IMSI/IMEI",
-      category: "Search & Analytic",
-    },
-    { result: "ddsdsd", category: "Link Analysis" },
-    { result: "ddsdsd", category: "Search & Analytic" },
-  ];
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -218,21 +206,22 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        {row.result}
+                        {row.report_name}
                       </TableCell>
                       <TableCell className={classes.cells}>
                         <Box display="flex">
                           <div
                             className={clsx(classes.categoryText, {
-                              [classes.categoryCase]:
-                                row.category === "Case Management",
-                              [classes.categoryAnalytic]:
-                                row.category === "Search & Analytic",
-                              [classes.categoryLink]:
-                                row.category === "Link Analysis",
+                              [classes.categoryCase]: row.category === "1",
+                              [classes.categoryAnalytic]: row.category === "2",
+                              [classes.categoryLink]: row.category === "3",
                             })}
                           >
-                            {row.category}
+                            {clsx({
+                              ["Case Management"]: row.category === "1",
+                              ["Search & Analytic"]: row.category === "2",
+                              ["Link Analysis"]: row.category === "3",
+                            })}
                           </div>
                           <Box display="flex"></Box>
                         </Box>

@@ -1,6 +1,6 @@
 import React from "react";
 // import AlertContext from "context/AlertContext";
-// import service from "services/KantorPusatService";
+// import Service from "services/AnalysisService";
 import {
   Paper,
   TableBody,
@@ -17,7 +17,7 @@ import {
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-// import KantorPusatContext from "context/KantorPusatContext";
+import LoggerContext from "context/LoggerContext";
 import { AppTableHead } from "components";
 import { AppIconButton } from "components";
 import clsx from "clsx";
@@ -143,15 +143,9 @@ export default function TableView() {
   const dense = true;
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   // const alertContext = React.useContext(AlertContext);
-  // const kantorPusatContext = React.useContext(KantorPusatContext);
+  const loggerContext = React.useContext(LoggerContext);
   const lowercasedFilter = "";
-  const filteredData = [
-    {
-      lastUpdate: "19-03-2021 14:40:00",
-      logs:
-        "https://jagowebdev.com/?nama=Agus+Prawoto+Hadi&email=prawoto%40gmail.com&submit=submit",
-    },
-  ];
+  const filteredData = loggerContext.state;
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -210,7 +204,7 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        {row.lastUpdate}
+                        {row.datetime}
                       </TableCell>
                       <TableCell className={classes.cells}>
                         <Box display="flex">{row.logs}</Box>

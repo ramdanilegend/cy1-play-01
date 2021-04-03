@@ -10,16 +10,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PaginationRounded() {
+export default function PaginationRounded(props) {
+  const { dataLength, handleChange, pageRows, page } = props;
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <Pagination
-        count={5}
-        variant="outlined"
         shape="rounded"
         color="primary"
+        page={page}
+        count={Math.ceil(dataLength / pageRows)}
+        showFirstButton
+        showLastButton
+        boundaryCount={2}
+        onChange={handleChange}
       />
     </div>
   );

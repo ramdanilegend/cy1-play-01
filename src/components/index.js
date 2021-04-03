@@ -11,3 +11,4 @@ export { default as AppPaginationRound } from "./PaginationRound";
 export { default as AppTextIconField } from "./TextIconField";
 export { default as AppDateRangeIconField } from "./DateRangeIconField";
 export { default as AppDialogDelete } from "./DialogDelete";
+export { default as Alert } from "./Alert";

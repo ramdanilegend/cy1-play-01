@@ -48,7 +48,14 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 function AppDialogDelete(props) {
-  const { open, handleClose, icon, title, text } = props;
+  const {
+    open,
+    handleClose,
+    icon,
+    title,
+    text,
+    handleDelete = () => {},
+  } = props;
   const classes = useStyles();
   return (
     <Dialog
@@ -92,7 +99,11 @@ function AppDialogDelete(props) {
             </Button>
           </Box>
           <Box display="flex">
-            <Button autoFocus onClick={handleClose} className={classes.btnSave}>
+            <Button
+              autoFocus
+              onClick={handleDelete}
+              className={classes.btnSave}
+            >
               Delete
             </Button>
           </Box>

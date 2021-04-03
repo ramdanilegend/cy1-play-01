@@ -10,3 +10,4 @@ export { default as SearchAnalyticView } from "./SearchAnalytic";
 export { default as UserManagementView } from "./UserManagement";
 export { default as UserRoleView } from "./UserRole";
 export { default as SigninView } from "./Signin";
+export { default as DashboardView } from "./Dashboard";

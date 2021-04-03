@@ -18,7 +18,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from "@material-ui/icons/Search";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-// import KantorPusatContext from "context/KantorPusatContext";
+import UserContext from "context/UserContext";
 import { AppTableHead, AppDialogDelete, AppIconButton } from "components";
 
 import clsx from "clsx";
@@ -139,7 +139,7 @@ const headCells = [
     label: "Phone Number",
   },
   {
-    id: "location",
+    id: "role",
     numeric: false,
     disablePadding: false,
     label: "Role",
@@ -171,42 +171,9 @@ export default function TableView() {
   const dense = true;
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   // const alertContext = React.useContext(AlertContext);
-  // const kantorPusatContext = React.useContext(KantorPusatContext);
+  const userContext = React.useContext(UserContext);
   const lowercasedFilter = "";
-  const filteredData = [
-    {
-      name: "Murder Case",
-      policeIdentifyNumber: "650912031",
-      clauseReference: "person@mail.com",
-      description: "089663699766 ",
-      category: "Admin",
-      createdAt: "2020-08-13 11:40:40",
-    },
-    {
-      name: "Murder Case",
-      policeIdentifyNumber: "650912031",
-      clauseReference: "person@mail.com",
-      description: "089663699766 ",
-      category: "Guest",
-      createdAt: "2020-08-13 11:40:40",
-    },
-    {
-      name: "Murder Case",
-      policeIdentifyNumber: "650912031",
-      clauseReference: "person@mail.com",
-      description: "089663699766 ",
-      category: "Data Manager",
-      createdAt: "2020-08-13 11:40:40",
-    },
-    {
-      name: "Murder Case",
-      policeIdentifyNumber: "650912031",
-      clauseReference: "person@mail.com",
-      description: "089663699766 ",
-      category: "Analyst",
-      createdAt: "2020-08-13 11:40:40",
-    },
-  ];
+  const filteredData = userContext.state;
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -272,7 +239,7 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        {row.policeIdentifyNumber}
+                        {row.pin}
                       </TableCell>
                       <TableCell
                         component="th"
@@ -280,7 +247,7 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        {row.clauseReference}
+                        {row.email}
                       </TableCell>
                       <TableCell
                         component="th"
@@ -288,7 +255,7 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        {row.description}
+                        {row.phone_number}
                       </TableCell>
                       <TableCell
                         component="th"
@@ -298,15 +265,18 @@ export default function TableView() {
                       >
                         <div
                           className={clsx(classes.categoryText, {
-                            [classes.categoryAdmin]: row.category === "Admin",
-                            [classes.categoryGuest]: row.category === "Guest",
-                            [classes.categoryDataManager]:
-                              row.category === "Data Manager",
-                            [classes.categoryAnalyst]:
-                              row.category === "Analyst",
+                            [classes.categoryAdmin]: row.id_role === "1",
+                            [classes.categoryGuest]: row.id_role === "2",
+                            [classes.categoryDataManager]: row.id_role === "3",
+                            [classes.categoryAnalyst]: row.id_role === "4",
                           })}
                         >
-                          {row.category}
+                          {clsx({
+                            ["Admin"]: row.id_role === "1",
+                            ["Guest"]: row.id_role === "2",
+                            ["Data Manager"]: row.id_role === "3",
+                            ["Analyst"]: row.id_role === "4",
+                          })}
                         </div>
                         <Box display="flex"></Box>
                       </TableCell>

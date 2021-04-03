@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const IconButton = (props) => {
-  const { children, styleName, onClick = () => {} } = props;
+  const { children, styleName, onClick = () => {}, ...rest } = props;
   const classes = useStyles();
   return (
     <div>
@@ -20,6 +20,7 @@ const IconButton = (props) => {
         classes={{ root: classes.root }}
         className={styleName}
         onClick={onClick}
+        {...rest}
       >
         {children}
       </Button>

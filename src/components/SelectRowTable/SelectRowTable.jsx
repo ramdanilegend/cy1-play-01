@@ -52,12 +52,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AppSelectRowTable() {
+export default function AppSelectRowTable(props) {
   const classes = useStyles();
-  const [age, setAge] = React.useState(5);
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+  const { data, handleChange } = props;
+
   return (
     <div>
       <FormControl className={classes.margin}>
@@ -65,7 +63,7 @@ export default function AppSelectRowTable() {
         <Select
           labelId="demo-customized-select-label"
           id="demo-customized-select"
-          value={age}
+          value={data}
           classes={{
             root: classes.select,
           }}
@@ -75,6 +73,7 @@ export default function AppSelectRowTable() {
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
           <MenuItem value={25}>25</MenuItem>
+          <MenuItem value={50}>50</MenuItem>
         </Select>
       </FormControl>
     </div>

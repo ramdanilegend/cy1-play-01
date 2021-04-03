@@ -18,7 +18,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from "@material-ui/icons/Search";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-// import KantorPusatContext from "context/KantorPusatContext";
+import RoleContext from "context/RoleContext";
 import { AppTableHead } from "components";
 import { AppIconButton } from "components";
 import clsx from "clsx";
@@ -140,25 +140,25 @@ const headCells = [
     label: "Geo Analytic",
   },
   {
-    id: "location",
+    id: "link_chart",
     numeric: false,
     disablePadding: false,
     label: "Link Chart",
   },
   {
-    id: "location",
+    id: "analysis_result",
     numeric: false,
     disablePadding: false,
     label: "Analysis Result",
   },
   {
-    id: "location",
+    id: "report_manager",
     numeric: false,
     disablePadding: false,
     label: "Report Manager",
   },
   {
-    id: "location",
+    id: "link_analytic_multi_misdn",
     numeric: false,
     disablePadding: false,
     label: "Liink Analytic Multi MSISDN",
@@ -187,22 +187,9 @@ export default function TableView() {
   const dense = true;
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   // const alertContext = React.useContext(AlertContext);
-  // const kantorPusatContext = React.useContext(KantorPusatContext);
+  const roleContext = React.useContext(RoleContext);
   const lowercasedFilter = "";
-  const filteredData = [
-    {
-      name: "Admin",
-    },
-    {
-      name: "Guest",
-    },
-    {
-      name: "Data Manager",
-    },
-    {
-      name: "Analyst",
-    },
-  ];
+  const filteredData = roleContext.state;
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -260,7 +247,7 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        {row.name}
+                        {row.role}
                       </TableCell>
                       <TableCell
                         component="th"
@@ -268,7 +255,9 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        <AppSwitch />
+                        <AppSwitch
+                          checked={row.dashboard === "0" ? false : true}
+                        />
                       </TableCell>
                       <TableCell
                         component="th"
@@ -276,7 +265,9 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        <AppSwitch />
+                        <AppSwitch
+                          checked={row.analytic === "0" ? false : true}
+                        />
                       </TableCell>
                       <TableCell
                         component="th"
@@ -284,7 +275,9 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        <AppSwitch />
+                        <AppSwitch
+                          checked={row.geo_analytic === "0" ? false : true}
+                        />
                       </TableCell>
                       <TableCell
                         component="th"
@@ -292,7 +285,9 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        <AppSwitch />
+                        <AppSwitch
+                          checked={row.link_chart === "0" ? false : true}
+                        />
                       </TableCell>
                       <TableCell
                         component="th"
@@ -300,7 +295,9 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        <AppSwitch />
+                        <AppSwitch
+                          checked={row.analysis_result === "0" ? false : true}
+                        />
                       </TableCell>
                       <TableCell
                         component="th"
@@ -308,7 +305,9 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        <AppSwitch />
+                        <AppSwitch
+                          checked={row.report_manager === "0" ? false : true}
+                        />
                       </TableCell>
                       <TableCell
                         component="th"
@@ -316,7 +315,13 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        <AppSwitch />
+                        <AppSwitch
+                          checked={
+                            row.link_analytic_multi_msisdn === "0"
+                              ? false
+                              : true
+                          }
+                        />
                       </TableCell>
 
                       <TableCell padding="checkbox" className={classes.cells}>

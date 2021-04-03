@@ -1,18 +1,20 @@
 import React from "react";
+
+import SettingContext from "context/SettingContext";
+import Service from "services/SettingService";
+import CheckIcon from "@material-ui/icons/Check";
+
 import {
   AppBreadcrumbs,
   AppWrapperBody,
   AppTableToolbar,
   AppSelectRowTable,
   AppSearchField,
+  AppPaginationRound,
 } from "components";
-import { makeStyles } from "@material-ui/core/styles";
-import TestContext from "context/TestContext";
-import CheckIcon from "@material-ui/icons/Check";
-import { Box, TextField } from "@material-ui/core";
+import { Box, useMediaQuery } from "@material-ui/core";
 import { TableView } from "./components";
-import { AppPaginationRound } from "components";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { makeStyles } from "@material-ui/core/styles";
 
 const data = [
   { title: "Home", color: "textPrimary", aktif: false },
@@ -35,39 +37,54 @@ const useStyles = makeStyles((theme) => ({
 const GlobalSettings = () => {
   const classes = useStyles();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("xs"));
+  const [data, setData] = React.useState([]);
+  const getData = async () => {
+    const data = await Service.getDataAll();
+    setData(data.data ? data.data : []);
+  };
+  React.useEffect(() => {
+    getData();
+  }, []);
   return (
     <AppWrapperBody>
       <AppBreadcrumbs data={data} />
-      <div className={classes.tableContainer}>
-        <AppTableToolbar
-          title="Global Settings"
-          icon={<CheckIcon fontSize="small" />}
-          refresh={() => {
-            console.log("test");
-          }}
-          context={TestContext}
-        />
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          padding="5px 15px"
-          flexDirection={matches ? "column-reverse" : "row"}
-        >
-          <Box display="flex" alignItems="center">
-            Show <AppSelectRowTable />
-            entries
+      <SettingContext.Provider
+        value={{
+          state: data,
+          updateState: getData,
+        }}
+      >
+        <div className={classes.tableContainer}>
+          <AppTableToolbar
+            title="Global Settings"
+            icon={<CheckIcon fontSize="small" />}
+            refresh={() => {
+              console.log("test");
+            }}
+            context={SettingContext}
+          />
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            padding="5px 15px"
+            flexDirection={matches ? "column-reverse" : "row"}
+          >
+            <Box display="flex" alignItems="center">
+              Show <AppSelectRowTable />
+              entries
+            </Box>
+            <Box display="flex" alignItems="center">
+              <AppSearchField />
+            </Box>
           </Box>
-          <Box display="flex" alignItems="center">
-            <AppSearchField />
+          <Box padding="5px 15px">
+            <TableView />
+            <Box display="flex" justifyContent="flex-end" marginBottom="10px">
+              <AppPaginationRound />
+            </Box>
           </Box>
-        </Box>
-        <Box padding="5px 15px">
-          <TableView />
-          <Box display="flex" justifyContent="flex-end" marginBottom="10px">
-            <AppPaginationRound />
-          </Box>
-        </Box>
-      </div>
+        </div>
+      </SettingContext.Provider>
     </AppWrapperBody>
   );
 };

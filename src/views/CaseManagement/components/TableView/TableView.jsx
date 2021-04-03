@@ -1,6 +1,5 @@
 import React from "react";
 // import AlertContext from "context/AlertContext";
-// import service from "services/KantorPusatService";
 import {
   Paper,
   TableBody,
@@ -13,14 +12,15 @@ import {
   Button,
   Tooltip,
   Box,
+  Link,
 } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from "@material-ui/icons/Search";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-// import KantorPusatContext from "context/KantorPusatContext";
+import CaseContext from "context/CaseContext";
 import { AppTableHead, AppDialogDelete, AppIconButton } from "components";
-import clsx from "clsx";
+
 // import FormUpdate from "./FormUpdate";
 
 //icon
@@ -93,19 +93,19 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "case-name",
+    id: "case_name",
     numeric: false,
     disablePadding: false,
     label: "Case Name",
   },
   {
-    id: "letter-number",
+    id: "letter_number",
     numeric: false,
     disablePadding: false,
     label: "Letter Number",
   },
   {
-    id: "clause-reference",
+    id: "clause_reference",
     numeric: false,
     disablePadding: false,
     label: "Clause Reference",
@@ -123,7 +123,7 @@ const headCells = [
     label: "Location",
   },
   {
-    id: "created-at",
+    id: "created_at",
     numeric: false,
     disablePadding: false,
     label: "Created At",
@@ -142,7 +142,16 @@ export default function TableView() {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("kode_asuransi");
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [open, setOpen] = React.useState(false);
+  const dense = true;
+
+  // const alertContext = React.useContext(AlertContext);
+  const caseContext = React.useContext(CaseContext);
+  const lowercasedFilter = "";
+  const filteredData = caseContext.state;
+  console.log(caseContext.state);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -150,51 +159,6 @@ export default function TableView() {
   const handleClose = () => {
     setOpen(false);
   };
-
-  const [page, setPage] = React.useState(0);
-  const dense = true;
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  // const alertContext = React.useContext(AlertContext);
-  // const kantorPusatContext = React.useContext(KantorPusatContext);
-  const lowercasedFilter = "";
-  const filteredData = [
-    {
-      case: "Murder Case",
-      letterNumber: "LP/597/VV/2009",
-      clauseReference: "KUHP Pasal 116 (2)",
-      description:
-        "On Tuesday, the six accused sat masked and a metre apart from one another as Mpembe’s lawyer, Jan Ellis, painstakingly cross-examined Masinya. ",
-      link: "d",
-      createdAt: "2020-08-13 11:40:40",
-    },
-    {
-      case: "Murder Case",
-      letterNumber: "LP/597/VV/2009",
-      clauseReference: "KUHP Pasal 116 (2)",
-      description:
-        "On Tuesday, the six accused sat masked and a metre apart from one another as Mpembe’s lawyer, Jan Ellis, painstakingly cross-examined Masinya. ",
-      link: "d",
-      createdAt: "2020-08-13 11:40:40",
-    },
-    {
-      case: "Murder Case",
-      letterNumber: "LP/597/VV/2009",
-      clauseReference: "KUHP Pasal 116 (2)",
-      description:
-        "On Tuesday, the six accused sat masked and a metre apart from one another as Mpembe’s lawyer, Jan Ellis, painstakingly cross-examined Masinya. ",
-      link: "d",
-      createdAt: "2020-08-13 11:40:40",
-    },
-    {
-      case: "Murder Case",
-      letterNumber: "LP/597/VV/2009",
-      clauseReference: "KUHP Pasal 116 (2)",
-      description:
-        "On Tuesday, the six accused sat masked and a metre apart from one another as Mpembe’s lawyer, Jan Ellis, painstakingly cross-examined Masinya. ",
-      link: "d",
-      createdAt: "2020-08-13 11:40:40",
-    },
-  ];
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -252,7 +216,7 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        {row.case}
+                        {row.case_name}
                       </TableCell>
                       <TableCell
                         component="th"
@@ -260,7 +224,7 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        {row.letterNumber}
+                        {row.letter_number}
                       </TableCell>
                       <TableCell
                         component="th"
@@ -268,7 +232,7 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        {row.clauseReference}
+                        {row.clause_reference}
                       </TableCell>
                       <TableCell
                         component="th"
@@ -284,10 +248,15 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        {row.link}
+                        <Link
+                          href={`https://www.google.com/maps/?q=${row.longlat}`}
+                          target="_blank"
+                        >
+                          Link
+                        </Link>
                       </TableCell>
                       <TableCell className={classes.cells}>
-                        {row.createdAt}
+                        {row.created_at}
                       </TableCell>
 
                       <TableCell padding="checkbox" className={classes.cells}>

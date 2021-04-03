@@ -1,6 +1,6 @@
 import React from "react";
-// import AlertContext from "context/AlertContext";
-// import service from "services/KantorPusatService";
+import AlertContext from "context/AlertContext";
+import Service from "services/AnalysisService";
 import {
   Paper,
   TableBody,
@@ -17,14 +17,22 @@ import {
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-// import KantorPusatContext from "context/KantorPusatContext";
-import { AppTableHead, AppIconButton, AppDialogDelete } from "components";
+import AnalysisContext from "context/AnalysisContext";
+import {
+  AppTableHead,
+  AppIconButton,
+  AppDialogDelete,
+  AppPaginationRound,
+} from "components";
 
 import clsx from "clsx";
 // import FormUpdate from "./FormUpdate";
 import CheckIcon from "@material-ui/icons/Check";
 //icon
 import TimelineIcon from "@material-ui/icons/Timeline";
+import { Link } from "react-router-dom";
+import Pagination from "@material-ui/lab/Pagination";
+import PaginationItem from "@material-ui/lab/PaginationItem";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -108,7 +116,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "analysis-result",
+    id: "analysis_name",
     numeric: false,
     disablePadding: false,
     label: "Analysis Result",
@@ -129,37 +137,36 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-export default function TableView() {
+const LinkBehavior = React.forwardRef((props, ref) => (
+  <Link ref={ref} to="/dashboard" {...props} />
+));
+
+export default function TableView(props) {
+  const { pageRows, query } = props;
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("kode_asuransi");
-  const [open, setOpen] = React.useState(false);
+  const [openDelete, setOpenDelete] = React.useState({
+    dialog: false,
+    id: "",
+  });
+  const [page, setPage] = React.useState(1);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const dense = true;
+
+  const handleClickOpen = (id) => {
+    setOpenDelete({ ...openDelete, dialog: true, id: id });
   };
   const handleClose = () => {
-    setOpen(false);
+    setOpenDelete({ ...openDelete, dialog: false, id: "" });
   };
 
-  const [page, setPage] = React.useState(0);
-  const dense = true;
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  // const alertContext = React.useContext(AlertContext);
-  // const kantorPusatContext = React.useContext(KantorPusatContext);
-  const lowercasedFilter = "";
-  const filteredData = [
-    {
-      result: "SA_DDMMYYYY_HHMM_MSISDN/IMSI/IMEI",
-      category: "Case Management",
-    },
-    {
-      result: "SA_DDMMYYYY_HHMM_MSISDN/IMSI/IMEI",
-      category: "Search & Analytic",
-    },
-    { result: "ddsdsd", category: "Link Analysis" },
-    { result: "ddsdsd", category: "Search & Analytic" },
-  ];
+  const analysisContext = React.useContext(AnalysisContext);
+  const alertContext = React.useContext(AlertContext);
+  const lowercasedFilter = query.toLowerCase();
+  const filteredData = analysisContext.state.filter((value) => {
+    return value.analysis_name.toLowerCase().includes(lowercasedFilter);
+  });
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -167,18 +174,34 @@ export default function TableView() {
     setOrderBy(property);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleChangePage = (event, value) => {
+    setPage(value);
   };
 
   const emptyRows =
-    rowsPerPage -
-    Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);
+    pageRows - Math.min(pageRows, filteredData.length - (page - 1) * pageRows);
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      alertContext.updateState(true, false, "success", "");
+      await Service.deleteData(openDelete.id);
+      alertContext.updateState(
+        false,
+        true,
+        "success",
+        "Menghapus Data berhasil"
+      );
+    } catch (ex) {
+      if (!ex.response) {
+        alertContext.updateState(false, true, "error", "Error 404");
+        return true;
+      }
+      alertContext.updateState(false, true, "error", ex.response.data);
+    }
+    setOpenDelete({ ...openDelete, dialog: false, id: "" });
+    analysisContext.updateState();
+  };
 
   return (
     <div className={classes.root}>
@@ -200,7 +223,7 @@ export default function TableView() {
             />
             <TableBody>
               {stableSort(filteredData, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .slice((page - 1) * pageRows, (page - 1) * pageRows + pageRows)
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -217,21 +240,22 @@ export default function TableView() {
                         scope="row"
                         className={classes.cells}
                       >
-                        {row.result}
+                        {row.analysis_name}
                       </TableCell>
                       <TableCell className={classes.cells}>
                         <Box display="flex">
                           <div
                             className={clsx(classes.categoryText, {
-                              [classes.categoryCase]:
-                                row.category === "Case Management",
-                              [classes.categoryAnalytic]:
-                                row.category === "Search & Analytic",
-                              [classes.categoryLink]:
-                                row.category === "Link Analysis",
+                              [classes.categoryCase]: row.category === "1",
+                              [classes.categoryAnalytic]: row.category === "2",
+                              [classes.categoryLink]: row.category === "3",
                             })}
                           >
-                            {row.category}
+                            {clsx({
+                              ["Case Management"]: row.category === "1",
+                              ["Search & Analytic"]: row.category === "2",
+                              ["Link Analysis"]: row.category === "3",
+                            })}
                           </div>
                           <Box display="flex"></Box>
                         </Box>
@@ -240,13 +264,18 @@ export default function TableView() {
                       <TableCell padding="checkbox" className={classes.cells}>
                         <Box display="flex" margin="7px">
                           <Box marginRight="5px">
-                            <AppIconButton styleName={classes.chartIcon}>
+                            <AppIconButton
+                              styleName={classes.chartIcon}
+                              component={LinkBehavior}
+                            >
                               <TimelineIcon color="action" fontSize="small" />
                             </AppIconButton>
                           </Box>
                           <AppIconButton
                             styleName={classes.deleteIcon}
-                            onClick={handleClickOpen}
+                            onClick={() => {
+                              handleClickOpen(row.id);
+                            }}
                           >
                             <DeleteForeverIcon
                               color="secondary"
@@ -267,9 +296,28 @@ export default function TableView() {
           </Table>
         </TableContainer>
       </Paper>
+      <Box
+        display="flex"
+        justifyContent="flex-end"
+        marginTop="10px"
+        marginBottom="10px"
+      >
+        <Pagination
+          page={page}
+          count={Math.ceil(filteredData.length / pageRows)}
+          shape="rounded"
+          color="primary"
+          showFirstButton
+          showLastButton
+          // boundaryCount={2}
+          onChange={handleChangePage}
+        />
+      </Box>
+
       <AppDialogDelete
-        open={open}
+        open={openDelete.dialog}
         handleClose={handleClose}
+        handleDelete={handleDelete}
         title="Delete analysis Result"
         text="analysis result"
       />

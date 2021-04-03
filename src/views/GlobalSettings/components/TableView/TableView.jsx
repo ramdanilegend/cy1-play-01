@@ -17,7 +17,7 @@ import {
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-// import KantorPusatContext from "context/KantorPusatContext";
+import SettingContext from "context/SettingContext";
 import { AppTableHead } from "components";
 import { AppIconButton } from "components";
 import clsx from "clsx";
@@ -150,7 +150,7 @@ export default function TableView() {
   const dense = true;
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   // const alertContext = React.useContext(AlertContext);
-  // const kantorPusatContext = React.useContext(KantorPusatContext);
+  // const kantorPusatContext = React.useContext(SettingContext);
   const lowercasedFilter = "";
   const filteredData = [
     {

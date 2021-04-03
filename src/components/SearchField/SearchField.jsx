@@ -23,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SearchField = () => {
+const SearchField = (props) => {
+  const { data, handleChange = () => {} } = props;
   const classes = useStyles();
   return (
     <Box display="flex">
@@ -31,6 +32,9 @@ const SearchField = () => {
         id="search-input"
         label="Search"
         variant="outlined"
+        name="search"
+        value={data}
+        onChange={handleChange}
         size="small"
         // className={classes.fieldRoot}
         classes={{ root: classes.fieldRoot }}
