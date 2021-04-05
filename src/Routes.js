@@ -3,7 +3,11 @@ import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom";
 import UserManagement from "views/UserManagement/UserManagement";
 
 import { RouteWithLayout } from "./components";
-import { Main as MainLayout, Minimal as MinimalLayout } from "./layouts";
+import {
+  Main as MainLayout,
+  Minimal as MinimalLayout,
+  Test as TestLayout,
+} from "./layouts";
 
 import {
   NotFoundView,
@@ -104,6 +108,13 @@ const Routes = () => {
           exact
           layout={MainLayout}
           path="/dashboard"
+        />
+
+        <RouteWithLayout
+          component={DashboardView}
+          exact
+          layout={TestLayout}
+          path="/dashboard-test"
         />
 
         <RouteWithLayout

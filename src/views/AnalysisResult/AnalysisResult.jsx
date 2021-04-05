@@ -79,7 +79,7 @@ const AnalysisResult = () => {
             flexDirection={matches ? "column-reverse" : "row"}
           >
             <Box display="flex" alignItems="center">
-              Show{" "}
+              Show
               <AppSelectRowTable
                 data={pageRows}
                 handleChange={handleChangePageRows}

@@ -11,6 +11,8 @@ import {
   colors,
 } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -20,14 +22,16 @@ const useStyles = makeStyles((theme) => ({
   },
   item: {
     display: "flex",
-    paddingTop: 0,
-    paddingBottom: 0,
+    justifyContent: "space-between",
+    paddingRight: "20px",
   },
   button: {
     color: "ffffff",
     padding: "10px 8px",
     justifyContent: "flex-start",
     textTransform: "none",
+    display: "flex",
+    flexDirection: "column",
     letterSpacing: 0,
     width: "100%",
     fontWeight: theme.typography.fontWeightMedium,
@@ -54,9 +58,13 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     fontWeight: theme.typography.fontWeightMedium,
   },
+  text: {
+    color: "#ffffff",
+  },
 }));
 
 const SidebarExpand = (props) => {
+  const { openSidebar, title, icon, className, children } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleClick = () => {
@@ -64,43 +72,49 @@ const SidebarExpand = (props) => {
   };
 
   return (
-    <List
-      className={clsx(classes.root, props.className)}
-      classes={{ root: classes.padding }}
-    >
+    <React.Fragment>
       <ListItem
+        button
         className={classes.item}
-        disableGutters
-        key={props.title}
+        // disableGutters
+        key={title}
         onClick={handleClick}
       >
-        <Button className={classes.button}>
-          <Box display="flex" justifyContent="flex-start" width="100%">
-            <Box display="flex" alignItems="center">
-              <div className={classes.icon}>{props.icon}</div>
+        {openSidebar ? (
+          <Box display="flex" justifyContent="space-between" width="100%">
+            <Box display="flex">
+              <ListItemIcon>{props.icon}</ListItemIcon>
+              <ListItemText
+                primary={props.title}
+                className={classes.text}
+                classes={{ primary: classes.text }}
+              />
             </Box>
-            <Box display="flex" alignItems="center">
-              <Typography align="left" className={classes.title}>
-                {props.title}
-              </Typography>
-            </Box>
+            <Box display="flex" justifyContent="flex-end">
+              {open ? (
+                <ExpandLess color="secondary" />
+              ) : (
+                <ExpandMore color="secondary" />
+              )}
+            </Box>{" "}
           </Box>
-
-          <Box display="flex" justifyContent="flex-end">
+        ) : (
+          <ListItemIcon>
+            {icon}
             {open ? (
               <ExpandLess color="secondary" />
             ) : (
               <ExpandMore color="secondary" />
             )}
-          </Box>
-        </Button>
+          </ListItemIcon>
+        )}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {props.children}
+          {children}
         </List>
       </Collapse>
-    </List>
+    </React.Fragment>
   );
 };
 

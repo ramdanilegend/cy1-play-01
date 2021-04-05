@@ -112,7 +112,7 @@ const Signin = () => {
 
               <TextField id="standard-basic" label="Username" />
 
-              <TextField id="standard-basic" label="Password" />
+              <TextField id="standard-basic" label="Password" type="password" />
               <Box paddingTop="30px"></Box>
 
               <Button className={classes.btn} component={LinkBehavior}>

@@ -26,6 +26,7 @@ import clsx from "clsx";
 
 //icon
 import TimelineIcon from "@material-ui/icons/Timeline";
+import Pagination from "@material-ui/lab/Pagination";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -109,7 +110,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "analysis-result",
+    id: "report_name",
     numeric: false,
     disablePadding: false,
     label: "Report Result",
@@ -130,19 +131,21 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-export default function TableView() {
+export default function TableView(props) {
+  const { pageRows, query } = props;
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("kode_asuransi");
   const [open, setOpen] = React.useState(false);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = React.useState(1);
   const dense = true;
 
   // const alertContext = React.useContext(AlertContext);
   const reportContext = React.useContext(ReportContext);
-  const lowercasedFilter = "";
-  const filteredData = reportContext.state;
+  const lowercasedFilter = query.toLowerCase();
+  const filteredData = reportContext.state.filter((value) => {
+    return value.report_name.toLowerCase().includes(lowercasedFilter);
+  });
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -160,14 +163,8 @@ export default function TableView() {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
   const emptyRows =
-    rowsPerPage -
-    Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);
+    pageRows - Math.min(pageRows, filteredData.length - (page - 1) * pageRows);
 
   return (
     <div className={classes.root}>
@@ -189,7 +186,7 @@ export default function TableView() {
             />
             <TableBody>
               {stableSort(filteredData, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .slice((page - 1) * pageRows, (page - 1) * pageRows + pageRows)
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -260,6 +257,16 @@ export default function TableView() {
           </Table>
         </TableContainer>
       </Paper>
+      <Pagination
+        page={page}
+        count={Math.ceil(filteredData.length / pageRows)}
+        shape="rounded"
+        color="primary"
+        showFirstButton
+        showLastButton
+        // boundaryCount={2}
+        onChange={handleChangePage}
+      />
       <AppDialogDelete
         open={open}
         handleClose={handleClose}

@@ -80,7 +80,7 @@ Sidebar.propTypes = {
   className: PropTypes.string,
   onClose: PropTypes.func,
   open: PropTypes.bool.isRequired,
-  variant: PropTypes.string.isRequired,
+  // variant: PropTypes.string.isRequired,
 };
 
 export default Sidebar;

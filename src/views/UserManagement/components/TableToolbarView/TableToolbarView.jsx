@@ -14,6 +14,8 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import { lighten, makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import AppDialogBasic from "components/DialogBasic/DialogBasic";
+import { FormAdd } from "./components";
 
 const useToolbarStyles = makeStyles((theme) => ({
   root: {
@@ -60,31 +62,50 @@ function TableToolbarView(props) {
   const { refresh, title, context, icon } = props;
   const contextSearch = React.useContext(context);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpenAdd = (data) => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
-    <Toolbar
-      className={classes.root}
-      classes={{ dense: classes.dense }}
-      variant="dense"
-    >
-      <div className={classes.containerTool}>
-        <Box display="flex">
-          {icon}
-          {title}
-        </Box>
-        <Box display="flex">
-          <Button
-            variant="contained"
-            // color="primary"
-            size="small"
-            endIcon={<AddIcon color="secondary" />}
-            classes={{ contained: classes.btnColor, label: classes.btnText }}
-          >
-            Add User
-          </Button>
-        </Box>
-      </div>
-    </Toolbar>
+    <React.Fragment>
+      <Toolbar
+        className={classes.root}
+        classes={{ dense: classes.dense }}
+        variant="dense"
+      >
+        <div className={classes.containerTool}>
+          <Box display="flex">
+            {icon}
+            {title}
+          </Box>
+          <Box display="flex">
+            <Button
+              variant="contained"
+              // color="primary"
+              size="small"
+              endIcon={<AddIcon color="secondary" />}
+              classes={{ contained: classes.btnColor, label: classes.btnText }}
+              onClick={handleOpenAdd}
+            >
+              Add User
+            </Button>
+          </Box>
+        </div>
+      </Toolbar>
+      <AppDialogBasic
+        open={open}
+        handleClose={handleClose}
+        title="Form Case"
+        icon={<AddIcon color="action" />}
+      >
+        <FormAdd handleClose={handleClose} />
+      </AppDialogBasic>
+    </React.Fragment>
   );
 }
 

@@ -63,7 +63,7 @@ const UserRole = () => {
             }}
             context={RoleContext}
           />
-          <Box
+          {/* <Box
             display="flex"
             justifyContent="space-between"
             padding="5px 15px"
@@ -76,12 +76,9 @@ const UserRole = () => {
             <Box display="flex" alignItems="center">
               <AppSearchField />
             </Box>
-          </Box>
+          </Box> */}
           <Box padding="5px 15px">
             <TableView />
-            <Box display="flex" justifyContent="flex-end" marginBottom="10px">
-              <AppPaginationRound />
-            </Box>
           </Box>
         </div>
       </RoleContext.Provider>

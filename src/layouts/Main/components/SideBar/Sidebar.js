@@ -1,176 +1,232 @@
 import React from "react";
 import clsx from "clsx";
-import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/styles";
-import { Drawer } from "@material-ui/core";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Drawer from "@material-ui/core/Drawer";
 
-import PerfectScrollbar from "react-perfect-scrollbar";
-import SettingsIcon from "@material-ui/icons/Settings";
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import AssessmentIcon from "@material-ui/icons/Assessment";
 import AccountTreeIcon from "@material-ui/icons/AccountTree";
 import FindReplaceIcon from "@material-ui/icons/FindReplace";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import DescriptionIcon from "@material-ui/icons/Description";
-import TuneIcon from "@material-ui/icons/Tune";
-import HistoryIcon from "@material-ui/icons/History";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
-import "react-perfect-scrollbar/dist/css/styles.css";
+import TuneIcon from "@material-ui/icons/Tune";
+import HistoryIcon from "@material-ui/icons/History";
+import { SidebarItem, SidebarExpand, SidebarExpandItem } from "./components";
+import SettingsIcon from "@material-ui/icons/Settings";
 
-import { ItemExpand, SidebarExpand, SidebarItem } from "./components";
+import ReactPerfectScrollbar from "react-perfect-scrollbar";
+
+import { Box } from "@material-ui/core";
+
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
-    width: 240,
-    [theme.breakpoints.up("lg")]: {
-      marginTop: 64,
-      height: "calc(100% - 64px)",
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: "nowrap",
+  },
+  drawerOpen: {
+    width: drawerWidth,
+    backgroundColor: "#2E343A",
+    marginTop: "65px",
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerClose: {
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    backgroundColor: "#2E343A",
+    marginTop: "65px",
+    overflowX: "hidden",
+    width: theme.spacing(7) + 1,
+    [theme.breakpoints.up("sm")]: {
+      width: theme.spacing(9) + 1,
     },
   },
-  root: {
-    backgroundColor: "#2E343A",
+  hide: {
+    display: "none",
+  },
+  toolbar: {
     display: "flex",
-    flexDirection: "column",
-    height: "100%",
-    overflow: "hidden",
-    padding: theme.spacing(2),
+    alignItems: "center",
+    // backgroundColor: "#3A4248",
+  },
+  toolbarOpen: {
+    justifyContent: "space-between",
+  },
+  toolbarClose: {
+    justifyContent: "center",
+  },
+  show: {
+    display: "flex",
   },
   divider: {
-    margin: theme.spacing(2, 0),
+    backgroundColor: "#3A4248",
   },
-  nav: {
-    marginBottom: theme.spacing(0),
+  text: {
+    color: "#ffffff",
   },
-  Item: {
-    marginBottom: theme.spacing(0),
+  titleMenu: {
+    color: "#FFFFFF",
+    paddingLeft: "20px",
   },
 }));
 
-const Sidebar = (props) => {
-  const { open, variant, onClose, className, ...rest } = props;
-
+function Sidebar() {
   const classes = useStyles();
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
 
-  const pages = [
-    {
-      title: "Analysis Result",
-      href: "/analysis-result",
-      icon: <AssessmentIcon color="secondary" />,
-    },
-    {
-      title: "Case Management",
-      href: "/case-management",
-      icon: <AccountTreeIcon color="secondary" />,
-    },
-    {
-      title: "Search & Analytic",
-      href: "/search-analytic",
-      icon: <FindReplaceIcon color="secondary" />,
-    },
-    {
-      title: "Link Analytic",
-      href: "/link-analytic",
-      icon: <TrendingUpIcon color="secondary" />,
-    },
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
 
-    {
-      title: "Report Manager",
-      href: "/report-manager",
-      icon: <DescriptionIcon color="secondary" />,
-    },
-    {
-      title: "User Management",
-      href: "/user-management",
-      icon: <SupervisedUserCircleIcon color="secondary" />,
-    },
-    {
-      title: "User Role",
-      href: "/user-role",
-      icon: <GroupAddIcon color="secondary" />,
-    },
-    {
-      title: "Global Settings",
-      href: "/global-settings",
-      icon: <TuneIcon color="secondary" />,
-    },
-    {
-      title: "Log",
-      href: "/log",
-      icon: <HistoryIcon color="secondary" />,
-    },
-  ];
-
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
   return (
     <Drawer
-      anchor="left"
-      classes={{ paper: classes.drawer }}
-      onClose={onClose}
-      open={open}
-      variant={variant}
+      variant="permanent"
+      className={clsx(classes.drawer, {
+        [classes.drawerOpen]: open,
+        [classes.drawerClose]: !open,
+      })}
+      classes={{
+        paper: clsx({
+          [classes.drawerOpen]: open,
+          [classes.drawerClose]: !open,
+        }),
+      }}
     >
-      <div {...rest} className={clsx(classes.root, className)}>
-        <PerfectScrollbar>
-          <SidebarItem
-            title={pages[0].title}
-            icon={pages[0].icon}
-            href={pages[0].href}
-          />
-          <SidebarItem
-            title={pages[1].title}
-            icon={pages[1].icon}
-            href={pages[1].href}
-          />
-          <SidebarItem
-            title={pages[2].title}
-            icon={pages[2].icon}
-            href={pages[2].href}
-          />
-          <SidebarItem
-            title={pages[3].title}
-            icon={pages[3].icon}
-            href={pages[3].href}
-          />
-          <SidebarItem
-            title={pages[4].title}
-            icon={pages[4].icon}
-            href={pages[4].href}
-          />
-          <SidebarExpand
-            title="Settings"
-            icon={<SettingsIcon color="secondary" />}
+      <Box
+        display="flex"
+        flexDirection="column"
+        height="90vh"
+        overflow="hidden"
+      >
+        <ReactPerfectScrollbar
+          options={{
+            suppressScrollX: true,
+          }}
+          component="div"
+        >
+          <Box
+            minHeight="100vh"
+            flexDirection="column"
+            height="90vh"
+            overflow="hidden"
           >
-            <ItemExpand
-              title={pages[5].title}
-              icon={pages[5].icon}
-              href={pages[5].href}
-            />
-            <ItemExpand
-              title={pages[6].title}
-              icon={pages[6].icon}
-              href={pages[6].href}
-            />
-            <ItemExpand
-              title={pages[7].title}
-              icon={pages[7].icon}
-              href={pages[7].href}
-            />
-            <ItemExpand
-              title={pages[8].title}
-              icon={pages[8].icon}
-              href={pages[8].href}
-            />
-          </SidebarExpand>
-        </PerfectScrollbar>
-      </div>
+            <div
+              className={clsx(classes.toolbar, {
+                [classes.toolbarOpen]: open,
+                [classes.toolbarClose]: !open,
+              })}
+            >
+              <IconButton
+                onClick={handleDrawerOpen}
+                className={clsx({
+                  [classes.hide]: open,
+                  [classes.show]: !open,
+                })}
+              >
+                <ChevronRightIcon color="secondary" />
+              </IconButton>
+              <div
+                className={clsx(classes.titleMenu, {
+                  [classes.hide]: !open,
+                  [classes.show]: open,
+                })}
+              >
+                Menu
+              </div>
+              <IconButton
+                onClick={handleDrawerClose}
+                className={clsx({
+                  [classes.hide]: !open,
+                  [classes.show]: open,
+                })}
+              >
+                <ChevronLeftIcon color="secondary" />
+              </IconButton>
+            </div>
+            <Divider variant="middle" />
+            {/* <Divider /> */}
+            <List>
+              <SidebarItem
+                href="analysis-result"
+                title="Analysis Result"
+                icon={<AssessmentIcon color="secondary" />}
+              />
+              <SidebarItem
+                href="case-management"
+                title="Case Management"
+                icon={<AccountTreeIcon color="secondary" />}
+              />
+              <SidebarItem
+                href="/search-analytic"
+                title="Search & Analytic"
+                icon={<FindReplaceIcon color="secondary" />}
+              />
+              <SidebarItem
+                href="/link-analytic"
+                title="Link Analytic"
+                icon={<TrendingUpIcon color="secondary" />}
+              />
+              <SidebarItem
+                href="/report-manager"
+                title="Report Manager"
+                icon={<DescriptionIcon color="secondary" />}
+              />
+              <SidebarExpand
+                title="Settings"
+                icon={<SettingsIcon color="secondary" />}
+                openSidebar={open}
+              >
+                <SidebarExpandItem
+                  href="/user-management"
+                  title="User Management"
+                  icon={<SupervisedUserCircleIcon color="secondary" />}
+                />
+                <SidebarExpandItem
+                  href="/user-role"
+                  title="User Role"
+                  icon={<GroupAddIcon color="secondary" />}
+                />
+                <SidebarExpandItem
+                  href="/global-settings"
+                  title="Global Settings"
+                  icon={<TuneIcon color="secondary" />}
+                />
+                <SidebarExpandItem
+                  href="/log"
+                  title="Log"
+                  icon={<HistoryIcon color="secondary" />}
+                />
+              </SidebarExpand>
+            </List>
+          </Box>
+        </ReactPerfectScrollbar>
+      </Box>
     </Drawer>
   );
-};
+}
 
-Sidebar.propTypes = {
-  className: PropTypes.string,
-  onClose: PropTypes.func,
-  open: PropTypes.bool.isRequired,
-  variant: PropTypes.string.isRequired,
-};
+// Sidebar.propTypes = {
+//   className: PropTypes.string,
+//   onClose: PropTypes.func,
+//   open: PropTypes.bool.isRequired,
+//   variant: PropTypes.string.isRequired,
+// };
 
 export default Sidebar;

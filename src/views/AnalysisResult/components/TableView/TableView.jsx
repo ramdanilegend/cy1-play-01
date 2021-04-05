@@ -146,8 +146,8 @@ export default function TableView(props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("kode_asuransi");
-  const [openDelete, setOpenDelete] = React.useState({
-    dialog: false,
+  const [open, setOpen] = React.useState({
+    dialogDelete: false,
     id: "",
   });
   const [page, setPage] = React.useState(1);
@@ -155,10 +155,10 @@ export default function TableView(props) {
   const dense = true;
 
   const handleClickOpen = (id) => {
-    setOpenDelete({ ...openDelete, dialog: true, id: id });
+    setOpen({ ...open, dialogDelete: true, id: id });
   };
   const handleClose = () => {
-    setOpenDelete({ ...openDelete, dialog: false, id: "" });
+    setOpen({ ...open, dialogDelete: false, id: "" });
   };
 
   const analysisContext = React.useContext(AnalysisContext);
@@ -185,13 +185,8 @@ export default function TableView(props) {
     e.preventDefault();
     try {
       alertContext.updateState(true, false, "success", "");
-      await Service.deleteData(openDelete.id);
-      alertContext.updateState(
-        false,
-        true,
-        "success",
-        "Menghapus Data berhasil"
-      );
+      await Service.deleteData(open.id);
+      alertContext.updateState(false, true, "success", "Data Analysis Deleted");
     } catch (ex) {
       if (!ex.response) {
         alertContext.updateState(false, true, "error", "Error 404");
@@ -199,7 +194,7 @@ export default function TableView(props) {
       }
       alertContext.updateState(false, true, "error", ex.response.data);
     }
-    setOpenDelete({ ...openDelete, dialog: false, id: "" });
+    setOpen({ ...open, dialogDelete: false, id: "" });
     analysisContext.updateState();
   };
 
@@ -315,7 +310,7 @@ export default function TableView(props) {
       </Box>
 
       <AppDialogDelete
-        open={openDelete.dialog}
+        open={open.dialogDelete}
         handleClose={handleClose}
         handleDelete={handleDelete}
         title="Delete analysis Result"

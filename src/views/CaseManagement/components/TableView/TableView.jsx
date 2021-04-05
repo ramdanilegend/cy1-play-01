@@ -1,5 +1,6 @@
 import React from "react";
-// import AlertContext from "context/AlertContext";
+import AlertContext from "context/AlertContext";
+import Service from "services/CaseService";
 import {
   Paper,
   TableBody,
@@ -24,7 +25,12 @@ import { AppTableHead, AppDialogDelete, AppIconButton } from "components";
 // import FormUpdate from "./FormUpdate";
 
 //icon
+import AddIcon from "@material-ui/icons/Add";
 import TimelineIcon from "@material-ui/icons/Timeline";
+import Pagination from "@material-ui/lab/Pagination";
+import clsx from "clsx";
+import AppDialogBasic from "components/DialogBasic/DialogBasic";
+import FormAdd from "./components/FormAdd/FormAdd";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   table: {
-    minWidth: 750,
+    maxWidth: 750,
   },
   visuallyHidden: {
     border: 0,
@@ -62,6 +68,12 @@ const useStyles = makeStyles((theme) => ({
   },
   cells: {
     borderRight: "1px solid #eeeeee",
+  },
+  cellCaseName: {
+    minWidth: "200px",
+  },
+  cellDescription: {
+    minWidth: "500px",
   },
 }));
 
@@ -138,26 +150,33 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-export default function TableView() {
+export default function TableView(props) {
+  const { pageRows, query } = props;
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("kode_asuransi");
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [open, setOpen] = React.useState(false);
+  const [page, setPage] = React.useState(1);
+
+  const [open, setOpen] = React.useState({
+    openDelete: false,
+    openAdd: false,
+    data: {},
+  });
   const dense = true;
 
-  // const alertContext = React.useContext(AlertContext);
+  const alertContext = React.useContext(AlertContext);
   const caseContext = React.useContext(CaseContext);
-  const lowercasedFilter = "";
-  const filteredData = caseContext.state;
-  console.log(caseContext.state);
+  const lowercasedFilter = query.toLowerCase();
+  const filteredData = caseContext.state.filter((value) => {
+    return value.case_name.toLowerCase().includes(lowercasedFilter);
+  });
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleOpenDelete = (data) => {
+    setOpen({ ...open, openDelete: true, openAdd: false, data: data });
   };
+
   const handleClose = () => {
-    setOpen(false);
+    setOpen({ ...open, openDelete: false, openAdd: false, data: "" });
   };
 
   const handleRequestSort = (event, property) => {
@@ -170,14 +189,25 @@ export default function TableView() {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
   const emptyRows =
-    rowsPerPage -
-    Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);
+    pageRows - Math.min(pageRows, filteredData.length - (page - 1) * pageRows);
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      alertContext.updateState(true, false, "success", "");
+      await Service.deleteData(open.data.id);
+      alertContext.updateState(false, true, "success", "Data Analysis Deleted");
+    } catch (ex) {
+      if (!ex.response) {
+        alertContext.updateState(false, true, "error", "Error 404");
+        return true;
+      }
+      alertContext.updateState(false, true, "error", ex.response.data);
+    }
+    handleClose();
+    caseContext.updateState();
+  };
 
   return (
     <div className={classes.root}>
@@ -199,7 +229,7 @@ export default function TableView() {
             />
             <TableBody>
               {stableSort(filteredData, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .slice((page - 1) * pageRows, (page - 1) * pageRows + pageRows)
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -214,7 +244,7 @@ export default function TableView() {
                         component="th"
                         id={labelId}
                         scope="row"
-                        className={classes.cells}
+                        className={clsx(classes.cells, classes.cellCaseName)}
                       >
                         {row.case_name}
                       </TableCell>
@@ -238,7 +268,7 @@ export default function TableView() {
                         component="th"
                         id={labelId}
                         scope="row"
-                        className={classes.cells}
+                        className={clsx(classes.cells, classes.cellDescription)}
                       >
                         {row.description}
                       </TableCell>
@@ -273,7 +303,9 @@ export default function TableView() {
                           </Box>
                           <AppIconButton
                             styleName={classes.deleteIcon}
-                            onClick={handleClickOpen}
+                            onClick={() => {
+                              handleOpenDelete(row);
+                            }}
                           >
                             <DeleteForeverIcon
                               color="secondary"
@@ -294,11 +326,30 @@ export default function TableView() {
           </Table>
         </TableContainer>
       </Paper>
+      <Box
+        display="flex"
+        justifyContent="flex-end"
+        marginTop="10px"
+        marginBottom="10px"
+      >
+        <Pagination
+          page={page}
+          count={Math.ceil(filteredData.length / pageRows)}
+          shape="rounded"
+          color="primary"
+          showFirstButton
+          showLastButton
+          // boundaryCount={2}
+          onChange={handleChangePage}
+        />
+      </Box>
+
       <AppDialogDelete
-        open={open}
+        open={open.openDelete}
         handleClose={handleClose}
         title="Delete Case"
         text="case"
+        handleDelete={handleDelete}
       />
     </div>
   );

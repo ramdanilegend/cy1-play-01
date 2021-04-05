@@ -72,29 +72,6 @@ function AppDialogBasic(props) {
         </Box>
       </MuiDialogTitle>
       <DialogContent>{children}</DialogContent>
-      <DialogActions>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          width="100%"
-          padding="0 10px"
-        >
-          <Box display="flex">
-            <Button
-              autoFocus
-              onClick={handleClose}
-              className={classes.btnCancel}
-            >
-              Cancel
-            </Button>
-          </Box>
-          <Box display="flex">
-            <Button autoFocus onClick={handleClose} className={classes.btnSave}>
-              Delete
-            </Button>
-          </Box>
-        </Box>
-      </DialogActions>
     </Dialog>
   );
 }

@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/styles";
 import { List, ListItem, Button, colors } from "@material-ui/core";
 import contextButton from "context/ButtonNavMainContext";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -38,6 +40,30 @@ const useStyles = makeStyles((theme) => ({
     },
     backgroundColor: "#3A4248",
   },
+
+  hide: {
+    display: "none",
+  },
+  toolbar: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "#3A4248",
+  },
+  toolbarOpen: {
+    justifyContent: "flex-end",
+  },
+  toolbarClose: {
+    justifyContent: "center",
+  },
+  show: {
+    display: "flex",
+  },
+  divider: {
+    backgroundColor: "#3A4248",
+  },
+  text: {
+    color: "#ffffff",
+  },
 }));
 
 const CustomRouterLink = forwardRef((props, ref) => (
@@ -47,7 +73,7 @@ const CustomRouterLink = forwardRef((props, ref) => (
 ));
 
 const SidebarItem = (props) => {
-  const { className, ...rest } = props;
+  const { className, href, icon, title, ...rest } = props;
 
   const btn = React.useContext(contextButton);
 
@@ -56,17 +82,22 @@ const SidebarItem = (props) => {
   return (
     <List {...rest} className={clsx(classes.root, className)}>
       <React.Fragment>
-        <ListItem className={classes.item} disableGutters key={props.title}>
-          <Button
-            activeClassName={classes.active}
-            className={classes.button}
-            component={CustomRouterLink}
-            onClick={btn.close}
-            to={props.href}
-          >
-            <div className={classes.icon}>{props.icon}</div>
-            {props.title}
-          </Button>
+        <ListItem
+          button
+          // disableGutters
+          key={"text"}
+          activeClassName={classes.active}
+          // className={classes.button}
+          component={CustomRouterLink}
+          // onClick={btn.close}
+          to={href}
+        >
+          <ListItemIcon>{icon}</ListItemIcon>
+          <ListItemText
+            primary={title}
+            className={classes.text}
+            classes={{ primary: classes.text }}
+          />
         </ListItem>
       </React.Fragment>
     </List>

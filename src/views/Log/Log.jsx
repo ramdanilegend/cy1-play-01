@@ -38,9 +38,17 @@ const Log = () => {
   const classes = useStyles();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("xs"));
   const [data, setData] = React.useState([]);
+  const [pageRows, setPageRows] = React.useState(5);
+  const [query, setQuery] = React.useState("");
   const getData = async () => {
     const data = await Service.getDataAll();
     setData(data.data ? data.data : []);
+  };
+  const handleChangePageRows = (event) => {
+    setPageRows(event.target.value);
+  };
+  const handleChangeSearch = (event) => {
+    setQuery(event.target.value);
   };
   React.useEffect(() => {
     getData();
@@ -70,18 +78,19 @@ const Log = () => {
             flexDirection={matches ? "column-reverse" : "row"}
           >
             <Box display="flex" alignItems="center">
-              Show <AppSelectRowTable />
+              Show{" "}
+              <AppSelectRowTable
+                data={pageRows}
+                handleChange={handleChangePageRows}
+              />
               entries
             </Box>
             <Box display="flex" alignItems="center">
-              <AppSearchField />
+              <AppSearchField data={query} handleChange={handleChangeSearch} />
             </Box>
           </Box>
           <Box padding="5px 15px">
-            <TableView />
-            <Box display="flex" justifyContent="flex-end" marginBottom="10px">
-              <AppPaginationRound />
-            </Box>
+            <TableView pageRows={pageRows} query={query} />
           </Box>
         </div>
       </LoggerContext.Provider>

@@ -31,14 +31,14 @@ export function getDataAll() {
 //   });
 // }
 
-// export function deleteData(id) {
-//   return http.delete(apiEndpoint + `/${id}`);
-// }
+export function deleteData(id) {
+  return http.delete(apiEndpoint + `/${id}`);
+}
 
 const CaseService = {
   getDataAll,
   //   postData,
   //   putData,
-  //   deleteData,
+  deleteData,
 };
 export default CaseService;

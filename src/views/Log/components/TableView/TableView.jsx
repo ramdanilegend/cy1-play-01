@@ -25,6 +25,7 @@ import clsx from "clsx";
 
 //icon
 import TimelineIcon from "@material-ui/icons/Timeline";
+import Pagination from "@material-ui/lab/Pagination";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -129,7 +130,8 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-export default function TableView() {
+export default function TableView(props) {
+  const { pageRows, query } = props;
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("kode_asuransi");
@@ -139,13 +141,18 @@ export default function TableView() {
     data: {},
   });
 
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = React.useState(1);
   const dense = true;
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
   // const alertContext = React.useContext(AlertContext);
   const loggerContext = React.useContext(LoggerContext);
-  const lowercasedFilter = "";
-  const filteredData = loggerContext.state;
+  const lowercasedFilter = query.toLowerCase();
+  const filteredData = loggerContext.state.filter((value) => {
+    return (
+      value.datetime.toLowerCase().includes(lowercasedFilter) ||
+      value.logs.toLowerCase().includes(lowercasedFilter)
+    );
+  });
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -157,14 +164,8 @@ export default function TableView() {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
   const emptyRows =
-    rowsPerPage -
-    Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);
+    pageRows - Math.min(pageRows, filteredData.length - (page - 1) * pageRows);
 
   return (
     <div className={classes.root}>
@@ -187,7 +188,7 @@ export default function TableView() {
             />
             <TableBody>
               {stableSort(filteredData, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .slice((page - 1) * pageRows, (page - 1) * pageRows + pageRows)
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -221,6 +222,23 @@ export default function TableView() {
           </Table>
         </TableContainer>
       </Paper>
+      <Box
+        display="flex"
+        justifyContent="flex-end"
+        marginTop="10px"
+        marginBottom="10px"
+      >
+        <Pagination
+          page={page}
+          count={Math.ceil(filteredData.length / pageRows)}
+          shape="rounded"
+          color="primary"
+          showFirstButton
+          showLastButton
+          // boundaryCount={2}
+          onChange={handleChangePage}
+        />
+      </Box>
     </div>
   );
 }
