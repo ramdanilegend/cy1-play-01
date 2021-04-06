@@ -94,6 +94,8 @@ function AppDialogDelete(props) {
               autoFocus
               onClick={handleClose}
               className={classes.btnCancel}
+              color="primary"
+              variant="contained"
             >
               Cancel
             </Button>
@@ -103,6 +105,8 @@ function AppDialogDelete(props) {
               autoFocus
               onClick={handleDelete}
               className={classes.btnSave}
+              color="primary"
+              variant="contained"
             >
               Delete
             </Button>

@@ -1,6 +1,6 @@
 import React from "react";
-// import AlertContext from "context/AlertContext";
-// import service from "services/KantorPusatService";
+import AlertContext from "context/AlertContext";
+import Service from "services/UserService";
 import {
   Paper,
   TableBody,
@@ -27,6 +27,8 @@ import clsx from "clsx";
 //icon
 import TimelineIcon from "@material-ui/icons/Timeline";
 import Pagination from "@material-ui/lab/Pagination";
+import AppDialogBasic from "components/DialogBasic/DialogBasic";
+import { FormUpdate } from "./components";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -159,20 +161,27 @@ export default function TableView(props) {
   const { pageRows, query } = props;
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("kode_asuransi");
-  const [open, setOpen] = React.useState(false);
+  const [orderBy, setOrderBy] = React.useState("name");
+  const [open, setOpen] = React.useState({
+    openDelete: false,
+    openUpdate: false,
+    data: {},
+  });
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleOpenDelete = (data) => {
+    setOpen({ ...open, openDelete: true, openUpdate: false, data: data });
+  };
+  const handleOpenUpdate = (data) => {
+    setOpen({ ...open, openDelete: false, openUpdate: true, data: data });
   };
   const handleClose = () => {
-    setOpen(false);
+    setOpen({ ...open, openDelete: false, openUpdate: false, data: {} });
   };
 
   const [page, setPage] = React.useState(1);
   const dense = true;
 
-  // const alertContext = React.useContext(AlertContext);
+  const alertContext = React.useContext(AlertContext);
   const userContext = React.useContext(UserContext);
   const lowercasedFilter = query.toLowerCase();
   const filteredData = userContext.state.filter((value) => {
@@ -191,6 +200,23 @@ export default function TableView(props) {
 
   const emptyRows =
     pageRows - Math.min(pageRows, filteredData.length - (page - 1) * pageRows);
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      alertContext.updateState(true, false, "success", "");
+      await Service.deleteData(open.data.id);
+      alertContext.updateState(false, true, "success", "Data Deleted");
+    } catch (ex) {
+      if (!ex.response) {
+        alertContext.updateState(false, true, "error", "Error 404");
+        return true;
+      }
+      alertContext.updateState(false, true, "error", ex.response.data);
+    }
+    setOpen({ ...open, openDelete: false, data: "" });
+    userContext.updateState();
+  };
 
   return (
     <div className={classes.root}>
@@ -282,13 +308,20 @@ export default function TableView(props) {
                       <TableCell padding="checkbox" className={classes.cells}>
                         <Box display="flex" margin="7px">
                           <Box marginRight="5px">
-                            <AppIconButton styleName={classes.editIcon}>
+                            <AppIconButton
+                              styleName={classes.editIcon}
+                              onClick={() => {
+                                handleOpenUpdate(row);
+                              }}
+                            >
                               <EditIcon color="action" fontSize="small" />
                             </AppIconButton>
                           </Box>
                           <AppIconButton
                             styleName={classes.deleteIcon}
-                            onClick={handleClickOpen}
+                            onClick={() => {
+                              handleOpenDelete(row);
+                            }}
                           >
                             <DeleteForeverIcon
                               color="secondary"
@@ -326,9 +359,18 @@ export default function TableView(props) {
           onChange={handleChangePage}
         />
       </Box>
-      <AppDialogDelete
-        open={open}
+      <AppDialogBasic
+        open={open.openUpdate}
         handleClose={handleClose}
+        title="Form Edit Case"
+        icon={<EditIcon color="action" />}
+      >
+        <FormUpdate handleClose={handleClose} data={open.data} />
+      </AppDialogBasic>
+      <AppDialogDelete
+        open={open.openDelete}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
         title="Delete User"
         text="user"
       />

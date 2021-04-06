@@ -40,8 +40,12 @@ const UserManagement = () => {
   const [pageRows, setPageRows] = React.useState(5);
   const [query, setQuery] = React.useState("");
   const getData = async () => {
-    const data = await Service.getDataAll();
-    setData(data.data ? data.data : []);
+    const dataGet = await Service.getDataAll();
+
+    setData(dataGet.data ? dataGet.data : []);
+  };
+  const addDataRow = (dataUpdate) => {
+    setData([...data, dataUpdate]);
   };
   const handleChangePageRows = (event) => {
     setPageRows(event.target.value);
@@ -59,6 +63,7 @@ const UserManagement = () => {
         value={{
           state: data,
           updateState: getData,
+          // addState: addDataRow,
         }}
       >
         <div className={classes.tableContainer}>

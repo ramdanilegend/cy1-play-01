@@ -48,8 +48,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FormAdd = (props) => {
-  const { handleClose } = props;
+const FormUpdate = (props) => {
+  const { handleClose, data } = props;
   const classes = useStyles();
   const alertContext = React.useContext(AlertContext);
   const userContext = React.useContext(UserContext);
@@ -67,14 +67,7 @@ const FormAdd = (props) => {
     <React.Fragment>
       <Container maxWidth="lg" fixed>
         <Formik
-          initialValues={{
-            name: "",
-            id_role: 1,
-            email: "",
-            pin: "",
-            phone_number: "",
-            password: "",
-          }}
+          initialValues={data}
           validate={(values) => {
             const errors = {};
 
@@ -82,11 +75,11 @@ const FormAdd = (props) => {
           }}
           validationSchema={UserSchema}
           onSubmit={async (values, { setSubmitting, resetForm }) => {
-            console.log(values);
+            // console.log(values);
             // e.preventDefault();
             try {
               alertContext.updateState(true, false, "success", "");
-              await Service.postData(values);
+              await Service.putData(values);
               alertContext.updateState(
                 false,
                 true,
@@ -102,16 +95,6 @@ const FormAdd = (props) => {
             }
             userContext.updateState();
             // handleClose();
-            resetForm({
-              values: {
-                name: "",
-                id_role: 1,
-                email: "",
-                pin: "",
-                phone_number: "",
-                password: "",
-              },
-            });
             setSubmitting(false);
           }}
         >
@@ -131,14 +114,14 @@ const FormAdd = (props) => {
                   <TextField
                     type="text"
                     name="name"
-                    error={errors.name ? true : false}
-                    helperText={
-                      errors.name && touched.name ? `${errors.name}` : null
-                    }
                     variant="outlined"
                     size="small"
                     placeholder="Input User Name"
                     onChange={handleChange}
+                    error={errors.name ? true : false}
+                    helperText={
+                      errors.name && touched.name ? `${errors.name}` : null
+                    }
                     // onBlur={handleBlur}
                     value={values.name}
                     fullWidth
@@ -215,14 +198,14 @@ const FormAdd = (props) => {
                   <TextField
                     type={showPassword ? "text" : "password"}
                     name="password"
+                    variant="outlined"
+                    size="small"
                     error={errors.password ? true : false}
                     helperText={
                       errors.password && touched.password
                         ? `${errors.password}`
                         : null
                     }
-                    variant="outlined"
-                    size="small"
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -283,4 +266,4 @@ const FormAdd = (props) => {
   );
 };
 
-export default FormAdd;
+export default FormUpdate;
