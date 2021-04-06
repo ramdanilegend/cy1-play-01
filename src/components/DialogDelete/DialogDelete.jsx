@@ -68,10 +68,7 @@ function AppDialogDelete(props) {
         className={classes.containerTitle}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Box display="flex">
-            <CheckIcon fontSize="small" />
-            {title}
-          </Box>
+          <Box display="flex">{title}</Box>
           <Box>
             <IconButton className={classes.btnCloseIcon} onClick={handleClose}>
               <CloseIcon color="action" />

@@ -67,7 +67,15 @@ const FormUpdate = (props) => {
     <React.Fragment>
       <Container maxWidth="lg" fixed>
         <Formik
-          initialValues={data}
+          initialValues={{
+            id: data.id,
+            name: data.name,
+            id_role: data.id_role,
+            email: data.email,
+            pin: data.pin,
+            phone_number: data.phone_number,
+            password: "",
+          }}
           validate={(values) => {
             const errors = {};
 
@@ -80,12 +88,7 @@ const FormUpdate = (props) => {
             try {
               alertContext.updateState(true, false, "success", "");
               await Service.putData(values);
-              alertContext.updateState(
-                false,
-                true,
-                "success",
-                "Membuat Data berhasil"
-              );
+              alertContext.updateState(false, true, "success", "Data Updated");
             } catch (ex) {
               if (!ex.response) {
                 alertContext.updateState(false, true, "error", "Error 404");
@@ -94,7 +97,7 @@ const FormUpdate = (props) => {
               alertContext.updateState(false, true, "error", ex.response.data);
             }
             userContext.updateState();
-            // handleClose();
+            handleClose();
             setSubmitting(false);
           }}
         >
@@ -108,7 +111,7 @@ const FormUpdate = (props) => {
             isSubmitting,
           }) => (
             <form onSubmit={handleSubmit} autoComplete="off">
-              <Grid container spacing={1}>
+              <Grid container spacing={3}>
                 <Grid item md={6} lg={6} xs={12}>
                   Name
                   <TextField
@@ -116,7 +119,7 @@ const FormUpdate = (props) => {
                     name="name"
                     variant="outlined"
                     size="small"
-                    placeholder="Input User Name"
+                    placeholder="Input Name"
                     onChange={handleChange}
                     error={errors.name ? true : false}
                     helperText={
@@ -126,6 +129,7 @@ const FormUpdate = (props) => {
                     value={values.name}
                     fullWidth
                   />
+                  <Box marginTop="10px" />
                   User Role
                   <TextField
                     type="text"
@@ -152,6 +156,7 @@ const FormUpdate = (props) => {
                       {"Analyst"}
                     </MenuItem>
                   </TextField>
+                  <Box marginTop="10px" />
                   Email
                   <TextField
                     type="text"
@@ -162,7 +167,7 @@ const FormUpdate = (props) => {
                     helperText={
                       errors.email && touched.email ? `${errors.email}` : null
                     }
-                    placeholder="Input User Email"
+                    placeholder="Input Email"
                     onChange={handleChange}
                     // onBlur={handleBlur}
                     value={values.email}
@@ -182,6 +187,7 @@ const FormUpdate = (props) => {
                     value={values.pin}
                     fullWidth
                   />
+                  <Box marginTop="10px" />
                   Phone Number
                   <TextField
                     type="text"
@@ -194,6 +200,7 @@ const FormUpdate = (props) => {
                     value={values.phone_number}
                     fullWidth
                   />
+                  <Box marginTop="10px" />
                   Password
                   <TextField
                     type={showPassword ? "text" : "password"}
@@ -227,7 +234,7 @@ const FormUpdate = (props) => {
                   />
                 </Grid>
               </Grid>
-
+              <Box marginTop="10px" />
               <Box
                 display="flex"
                 justifyContent="space-between"

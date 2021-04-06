@@ -32,6 +32,7 @@ const UserSchema = Yup.object().shape({
     .max(30, "Maxsimal 30 Character")
     .uppercase("1 Minimal Character Uppercase")
     .required("Required"),
+  id_role: Yup.string().required(),
   email: Yup.string().email("Invalid email").required("Required"),
 });
 
@@ -125,7 +126,7 @@ const FormAdd = (props) => {
             isSubmitting,
           }) => (
             <form onSubmit={handleSubmit} autoComplete="off">
-              <Grid container spacing={1}>
+              <Grid container spacing={3}>
                 <Grid item md={6} lg={6} xs={12}>
                   Name
                   <TextField
@@ -137,12 +138,13 @@ const FormAdd = (props) => {
                     }
                     variant="outlined"
                     size="small"
-                    placeholder="Input User Name"
+                    placeholder="Input Name"
                     onChange={handleChange}
                     // onBlur={handleBlur}
                     value={values.name}
                     fullWidth
                   />
+                  <Box marginTop="10px" />
                   User Role
                   <TextField
                     type="text"
@@ -169,6 +171,7 @@ const FormAdd = (props) => {
                       {"Analyst"}
                     </MenuItem>
                   </TextField>
+                  <Box marginTop="10px" />
                   Email
                   <TextField
                     type="text"
@@ -179,7 +182,7 @@ const FormAdd = (props) => {
                     helperText={
                       errors.email && touched.email ? `${errors.email}` : null
                     }
-                    placeholder="Input User Email"
+                    placeholder="Input Email"
                     onChange={handleChange}
                     // onBlur={handleBlur}
                     value={values.email}
@@ -199,6 +202,7 @@ const FormAdd = (props) => {
                     value={values.pin}
                     fullWidth
                   />
+                  <Box marginTop="10px" />
                   Phone Number
                   <TextField
                     type="text"
@@ -211,6 +215,7 @@ const FormAdd = (props) => {
                     value={values.phone_number}
                     fullWidth
                   />
+                  <Box marginTop="10px" />
                   Password
                   <TextField
                     type={showPassword ? "text" : "password"}
@@ -244,7 +249,7 @@ const FormAdd = (props) => {
                   />
                 </Grid>
               </Grid>
-
+              <Box marginTop="10px" />
               <Box
                 display="flex"
                 justifyContent="space-between"

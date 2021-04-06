@@ -21,7 +21,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/NotificationsOutlined";
 import InputIcon from "@material-ui/icons/Input";
 import Avatar from "@material-ui/core/Avatar";
-import Logo from "assets/img/core-ui-logo.png";
+import Logo from "assets/img/ria.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,7 +60,7 @@ const Topbar = (props) => {
     <AppBar {...rest} className={clsx(classes.root, className)}>
       <Toolbar>
         <RouterLink to="/">
-          <img alt="Logo" src={Logo} width="100px" height="auto" />
+          <img alt="Logo" src={Logo} width="75px" height="auto" />
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>

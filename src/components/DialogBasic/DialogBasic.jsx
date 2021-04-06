@@ -35,7 +35,7 @@ const DialogContent = withStyles((theme) => ({
 }))(MuiDialogContent);
 
 function AppDialogBasic(props) {
-  const { open, handleClose, icon, title, children } = props;
+  const { open, handleClose, title, children } = props;
   const classes = useStyles();
   return (
     <Dialog
@@ -48,10 +48,7 @@ function AppDialogBasic(props) {
         className={classes.containerTitle}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Box display="flex">
-            {icon}
-            {title}
-          </Box>
+          <Box display="flex">{title}</Box>
           <Box>
             <IconButton className={classes.btnCloseIcon} onClick={handleClose}>
               <CloseIcon color="action" />

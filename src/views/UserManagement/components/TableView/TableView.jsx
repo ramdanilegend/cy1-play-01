@@ -185,7 +185,12 @@ export default function TableView(props) {
   const userContext = React.useContext(UserContext);
   const lowercasedFilter = query.toLowerCase();
   const filteredData = userContext.state.filter((value) => {
-    return value.name.toLowerCase().includes(lowercasedFilter);
+    return (
+      value.name.toLowerCase().includes(lowercasedFilter) ||
+      value.pin.toLowerCase().includes(lowercasedFilter) ||
+      value.email.toLowerCase().includes(lowercasedFilter) ||
+      value.phone_number.toLowerCase().includes(lowercasedFilter)
+    );
   });
 
   const handleRequestSort = (event, property) => {
@@ -227,6 +232,7 @@ export default function TableView(props) {
             aria-labelledby="tableTitle"
             size={dense ? "small" : "medium"}
             aria-label="enhanced table"
+            // stickyHeader
           >
             <AppTableHead
               classes={classes}
