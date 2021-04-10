@@ -83,11 +83,12 @@ function TableToolbarView(props) {
       </Toolbar>
       <AppDialogBasic
         open={open}
+        maxWidth="md"
         handleClose={handleClose}
         title="Form Case"
         icon={<AddIcon color="action" />}
       >
-        <FormAdd />
+        <FormAdd handleClose={handleClose} />
       </AppDialogBasic>
     </React.Fragment>
   );

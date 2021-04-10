@@ -102,7 +102,7 @@ const FormAdd = (props) => {
               alertContext.updateState(false, true, "error", ex.response.data);
             }
             userContext.updateState();
-            // handleClose();
+            handleClose();
             resetForm({
               values: {
                 name: "",

@@ -12,7 +12,7 @@ import {
   AppPaginationRound,
 } from "components";
 import { Box, useMediaQuery } from "@material-ui/core";
-import { TableToolbarView, TableView } from "./components";
+import { TableToolbarView, TableView, TestMap } from "./components";
 import { makeStyles } from "@material-ui/core/styles";
 
 const dataBreadcrumbs = [
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CaseManagement = () => {
+const CaseManagement = (props) => {
   const classes = useStyles();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("xs"));
   const [data, setData] = React.useState([]);
@@ -93,6 +93,12 @@ const CaseManagement = () => {
           </Box>
         </div>
       </CaseContext.Provider>
+      {/* <TestMap
+        google={props.google}
+        center={{ lat: 18.5204, lng: 73.8567 }}
+        height="300px"
+        zoom={15}
+      /> */}
     </AppWrapperBody>
   );
 };

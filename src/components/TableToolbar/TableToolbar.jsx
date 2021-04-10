@@ -37,9 +37,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 function AppTableToolbar(props) {
   const classes = useToolbarStyles();
 
-  const { refresh, title, context, icon } = props;
-  const contextSearch = React.useContext(context);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const { title, icon } = props;
 
   return (
     <Toolbar
@@ -49,7 +47,7 @@ function AppTableToolbar(props) {
     >
       <Box display="flex">
         <Box display="flex">
-          {icon}
+          {icon ? icon : ""}
           {title}
         </Box>
       </Box>

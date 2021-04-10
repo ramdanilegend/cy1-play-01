@@ -9,15 +9,49 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import TestContext from "context/TestContext";
 import CheckIcon from "@material-ui/icons/Check";
-import { Box, TextField } from "@material-ui/core";
+import { Box, Button, TextField } from "@material-ui/core";
 // import { TableView } from "./components";
-import { AppPaginationRound } from "components";
+import { AppPaginationRound, LinkBehavior } from "components";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import {
+  TabsView,
+  DashboardView,
+  AnalyticView,
+  GeoAnalyticView,
+  LinkChartView,
+} from "./components";
+import AssessmentOutlinedIcon from "@material-ui/icons/AssessmentOutlined";
+import DonutLargeOutlinedIcon from "@material-ui/icons/DonutLargeOutlined";
+import PersonPinCircleOutlinedIcon from "@material-ui/icons/PersonPinCircleOutlined";
+import TrendingUpOutlinedIcon from "@material-ui/icons/TrendingUpOutlined";
+import { Link } from "react-router-dom";
 
-const data = [
+const dataBreadcrumb = [
   { title: "Home", color: "textPrimary", aktif: false },
   { title: "Admin", color: "textPrimary", aktif: false },
   { title: "Dashboard", color: "textPrimary", aktif: true },
+];
+const dataTab = [
+  {
+    label: "Dashboard",
+    icon: <DonutLargeOutlinedIcon />,
+    component: <DashboardView />,
+  },
+  {
+    label: "Analytic",
+    icon: <AssessmentOutlinedIcon />,
+    component: <AnalyticView />,
+  },
+  {
+    label: "Geo Analytic",
+    icon: <PersonPinCircleOutlinedIcon />,
+    component: <GeoAnalyticView />,
+  },
+  {
+    label: "Link Chart",
+    icon: <TrendingUpOutlinedIcon />,
+    component: <LinkChartView />,
+  },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -37,36 +71,19 @@ const Dashboard = () => {
   const matches = useMediaQuery((theme) => theme.breakpoints.down("xs"));
   return (
     <AppWrapperBody>
-      <AppBreadcrumbs data={data} />
-      <div className={classes.tableContainer}>
-        <AppTableToolbar
-          title="Analysis Result"
-          icon={<CheckIcon fontSize="small" />}
-          refresh={() => {
-            console.log("test");
-          }}
-          context={TestContext}
-        />
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          padding="5px 15px"
-          flexDirection={matches ? "column-reverse" : "row"}
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <AppBreadcrumbs data={dataBreadcrumb} />
+        <Button
+          variant="contained"
+          component={LinkBehavior}
+          to="/analysis-result"
         >
-          <Box display="flex" alignItems="center">
-            Show <AppSelectRowTable />
-            entries
-          </Box>
-          <Box display="flex" alignItems="center">
-            <AppSearchField />
-          </Box>
-        </Box>
-        <Box padding="5px 15px">
-          {/* <TableView /> */}
-          <Box display="flex" justifyContent="flex-end" marginBottom="10px">
-            <AppPaginationRound />
-          </Box>
-        </Box>
+          Back
+        </Button>
+      </Box>
+
+      <div className={classes.tableContainer}>
+        <TabsView data={dataTab} />
       </div>
     </AppWrapperBody>
   );

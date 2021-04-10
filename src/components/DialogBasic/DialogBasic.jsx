@@ -35,13 +35,14 @@ const DialogContent = withStyles((theme) => ({
 }))(MuiDialogContent);
 
 function AppDialogBasic(props) {
-  const { open, handleClose, title, children } = props;
+  const { open, handleClose, title, children, maxWidth = "sm" } = props;
   const classes = useStyles();
   return (
     <Dialog
       onClose={handleClose}
       aria-labelledby="customized-dialog-title"
       open={open}
+      maxWidth={maxWidth}
     >
       <MuiDialogTitle
         id="customized-dialog-title"
