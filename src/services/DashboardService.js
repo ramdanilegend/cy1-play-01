@@ -15,10 +15,14 @@ export function postData() {
       daterangepicker: "04/05/2019 - 04/05/2021",
       datetime: null,
     }
-    // { headers: { "Access-Control-Allow-Origin": "*" } }
+    // {
+    //   headers: {
+    //     "http.cors.allow-headers":
+    //       "X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization",
+    //   },
+    // }
   );
 }
-
 // export function putData(id, data) {
 //   return http.put(apiEndpoint + `/${id}`, {
 //     kode_kantor_pusat: data.kode_kantor_pusat,

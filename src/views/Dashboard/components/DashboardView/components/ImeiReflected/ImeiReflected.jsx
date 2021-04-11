@@ -43,7 +43,7 @@ const ImeiReflected = () => {
     <TableContainer>
       <AppTableToolbar title="IMEI Reflected" />
       <ResponsiveContainer width="100%" height="100%">
-        <PieChart width={400} height={400}>
+        <PieChart width={100} height={100}>
           <Pie
             data={data}
             cx="50%"

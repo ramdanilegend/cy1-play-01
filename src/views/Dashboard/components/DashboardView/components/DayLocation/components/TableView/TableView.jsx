@@ -23,7 +23,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from "@material-ui/icons/Search";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import DashboardContext from "context/DashboardContext";
+import CaseContext from "context/CaseContext";
 import { AppTableHead, AppDialogDelete, AppIconButton } from "components";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
@@ -141,55 +141,55 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "0",
+    id: "case_name",
     numeric: false,
     disablePadding: false,
     label: "",
   },
   {
-    id: "caller",
+    id: "case_name",
     numeric: false,
     disablePadding: false,
     label: "Caller",
   },
   {
-    id: "called",
+    id: "letter_number",
     numeric: false,
     disablePadding: false,
     label: "Called",
   },
   {
-    id: "totalCall",
+    id: "clause_reference",
     numeric: false,
     disablePadding: false,
     label: "Total Calls",
   },
   {
-    id: "duration",
+    id: "description",
     numeric: false,
     disablePadding: false,
     label: "Total Duration ",
   },
   {
-    id: "callType",
+    id: "location",
     numeric: false,
     disablePadding: false,
     label: "Call Type",
   },
   {
-    id: "firstCall",
+    id: "created_at",
     numeric: false,
     disablePadding: false,
     label: "First Call",
   },
   {
-    id: "lastCall",
+    id: "created_at",
     numeric: false,
     disablePadding: false,
     label: "Last Call",
   },
   {
-    id: "deltaDate",
+    id: "created_at",
     numeric: false,
     disablePadding: false,
     label: "<>",
@@ -343,12 +343,19 @@ export default function TableView(props) {
   const dense = true;
 
   // const alertContext = React.useContext(AlertContext);
-  const dashboardContext = React.useContext(DashboardContext);
+  // const caseContext = React.useContext(CaseContext);
   // const lowercasedFilter = query.toLowerCase();
-  console.log(dashboardContext.state);
-  const a = dashboardContext.state;
-  console.log(a.msisdn);
   const filteredData = [
+    {
+      caller: "6285813524804",
+      called: "6285888412387",
+      totalCall: 125,
+      duration: 8972,
+      callType: "VOICE",
+      firstCall: "21/Nov/20",
+      lastCall: "07/Dec/20",
+      deltaDate: 16,
+    },
     {
       caller: "6285813524804",
       called: "6285888412387",
@@ -358,6 +365,36 @@ export default function TableView(props) {
       firstCall: "27/Nov/20",
       lastCall: "28/Nov/20",
       deltaDate: 1,
+    },
+    {
+      caller: "6285813524804",
+      called: "6285693635346",
+      totalCall: 101,
+      duration: 8180,
+      callType: "VOICE",
+      firstCall: "22/Nov/20",
+      lastCall: "09/Dec/20",
+      deltaDate: 17,
+    },
+    {
+      caller: "6285813524804",
+      called: "6285693635346",
+      totalCall: 7,
+      duration: 333,
+      callType: "CFW",
+      firstCall: "22/Nov/20",
+      lastCall: "01/Dec/20",
+      deltaDate: 9,
+    },
+    {
+      caller: "6285813524804",
+      called: "6285693635346",
+      totalCall: 2,
+      duration: 0,
+      callType: "SMS",
+      firstCall: "24/Nov/20",
+      lastCall: "24/Nov/20",
+      deltaDate: 0,
     },
   ];
 
