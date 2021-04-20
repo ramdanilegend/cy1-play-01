@@ -1,6 +1,5 @@
 import React from "react";
-import AlertContext from "context/AlertContext";
-import Service from "services/CaseService";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import {
   Paper,
   TableBody,
@@ -9,109 +8,89 @@ import {
   TableRow,
   TablePagination,
   Table,
-  ButtonGroup,
-  Button,
-  Tooltip,
-  Box,
-  Link,
-  IconButton,
-  Collapse,
-  Typography,
-  TableHead,
 } from "@material-ui/core";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import EditIcon from "@material-ui/icons/Edit";
-import SearchIcon from "@material-ui/icons/Search";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import DashboardContext from "context/DashboardContext";
-import { AppTableHead, AppDialogDelete, AppIconButton } from "components";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
-// import FormUpdate from "./FormUpdate";
-
-//icon
-import AddIcon from "@material-ui/icons/Add";
-import TimelineIcon from "@material-ui/icons/Timeline";
-import Pagination from "@material-ui/lab/Pagination";
 import clsx from "clsx";
-import AppDialogBasic from "components/DialogBasic/DialogBasic";
-// import FormAdd from "./components/FormAdd/FormAdd";
+import { TableHeadView, TableRowsView } from "./components";
+import { SkeletonDashboardComponent } from "components";
+
+const columns = [
+  {
+    id: "id",
+    numeric: false,
+    disablePadding: true,
+    label: "",
+    minWidth: 20,
+  },
+  {
+    id: "caller",
+    numeric: false,
+    disablePadding: true,
+    label: "Caller",
+    minWidth: 120,
+  },
+  {
+    id: "called",
+    numeric: false,
+    disablePadding: true,
+    label: "Called",
+    minWidth: 120,
+  },
+  {
+    id: "totalCall",
+    numeric: false,
+    disablePadding: true,
+    label: "Total Calls",
+    minWidth: 140,
+  },
+  {
+    id: "duration",
+    numeric: false,
+    disablePadding: true,
+    label: "Total Duration ",
+    minWidth: 150,
+  },
+  {
+    id: "callType",
+    numeric: false,
+    disablePadding: true,
+    label: "Call Type",
+    minWidth: 120,
+  },
+  {
+    id: "firstCall",
+    numeric: false,
+    disablePadding: true,
+    label: "First Call",
+    minWidth: 120,
+  },
+  {
+    id: "lastCall",
+    numeric: false,
+    disablePadding: true,
+    label: "Last Call",
+    minWidth: 120,
+  },
+];
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
   },
-  paper: {
-    width: "100%",
-    marginBottom: theme.spacing(2),
+  container: {
+    maxHeight: 190,
   },
-  table: {
-    maxWidth: 750,
+  containerFull: {
+    maxHeight: "80vh",
+    minHeight: "80vh",
   },
-  visuallyHidden: {
-    border: 0,
-    clip: "rect(0 0 0 0)",
-    height: 1,
-    margin: -1,
-    overflow: "hidden",
-    padding: 0,
-    position: "absolute",
-    top: 20,
-    width: 1,
-  },
-  btnGroup: {
-    margin: "5px 7px",
-  },
-  chartIcon: {
-    backgroundColor: "#4DBD74",
-  },
-  deleteIcon: {
-    backgroundColor: "#F86C6B",
-  },
-  editIcon: {
-    backgroundColor: "#20A8D8",
-  },
-  cells: {
-    borderRight: "1px solid #eeeeee",
-    // minWidth: "180px",
-  },
-  cellBorders: {
-    borderRight: "1px solid #eeeeee",
-    minWidth: 0,
+  styledRow: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
   },
 }));
-
-function createData(name, calories, fat, carbs, protein, price) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    price,
-    history: [
-      { date: "2020-01-05", customerId: "11091700", amount: 3 },
-      { date: "2020-01-02", customerId: "Anonymous", amount: 1 },
-    ],
-  };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0, 3.99),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3, 4.99),
-  createData("Eclair", 262, 16.0, 24, 6.0, 3.79),
-  createData("Cupcake", 305, 3.7, 67, 4.3, 2.5),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -139,227 +118,32 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-  {
-    id: "0",
-    numeric: false,
-    disablePadding: false,
-    label: "",
-  },
-  {
-    id: "caller",
-    numeric: false,
-    disablePadding: false,
-    label: "Caller",
-  },
-  {
-    id: "called",
-    numeric: false,
-    disablePadding: false,
-    label: "Called",
-  },
-  {
-    id: "totalCall",
-    numeric: false,
-    disablePadding: false,
-    label: "Total Calls",
-  },
-  {
-    id: "duration",
-    numeric: false,
-    disablePadding: false,
-    label: "Total Duration ",
-  },
-  {
-    id: "callType",
-    numeric: false,
-    disablePadding: false,
-    label: "Call Type",
-  },
-  {
-    id: "firstCall",
-    numeric: false,
-    disablePadding: false,
-    label: "First Call",
-  },
-  {
-    id: "lastCall",
-    numeric: false,
-    disablePadding: false,
-    label: "Last Call",
-  },
-  {
-    id: "deltaDate",
-    numeric: false,
-    disablePadding: false,
-    label: "<>",
-  },
-];
+function TableView(props) {
+  const {
+    pagination,
+    rowsPerPage,
+    page,
+    handleChangeRowsPerPage,
+    handleChangePage,
+  } = props;
 
-const StyledTableRow = withStyles((theme) => ({
-  root: {
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
-  },
-}))(TableRow);
-
-const TableRowView = (props) => {
-  const { row, index, labelId, classes } = props;
-  const [open, setOpen] = React.useState(false);
-
-  return (
-    <React.Fragment>
-      <StyledTableRow hover role="checkbox" tabIndex={-1} key={index}>
-        <TableCell
-          style={{ minWidth: 0 }}
-          component="th"
-          id={labelId}
-          scope="row"
-        >
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-        <TableCell
-          component="th"
-          id={labelId}
-          scope="row"
-          className={classes.cells}
-        >
-          {row.caller}
-        </TableCell>
-        <TableCell
-          component="th"
-          id={labelId}
-          scope="row"
-          className={classes.cells}
-        >
-          {row.called}
-        </TableCell>
-        <TableCell
-          component="th"
-          id={labelId}
-          scope="row"
-          className={classes.cells}
-        >
-          {row.totalCall}
-        </TableCell>
-        <TableCell
-          component="th"
-          id={labelId}
-          scope="row"
-          className={classes.cells}
-        >
-          {row.duration}
-        </TableCell>
-        <TableCell
-          component="th"
-          id={labelId}
-          scope="row"
-          className={classes.cells}
-        >
-          {row.callType}
-        </TableCell>
-        <TableCell
-          component="th"
-          id={labelId}
-          scope="row"
-          className={classes.cells}
-        >
-          {row.firstCall}
-        </TableCell>
-        <TableCell
-          component="th"
-          id={labelId}
-          scope="row"
-          className={classes.cells}
-        >
-          {row.lastCall}
-        </TableCell>
-        <TableCell
-          component="th"
-          id={labelId}
-          scope="row"
-          className={classes.cells}
-        >
-          {row.deltaDate}
-        </TableCell>
-      </StyledTableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box margin={1}>
-              <Typography variant="h6" gutterBottom component="div">
-                History
-              </Typography>
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Customer</TableCell>
-                    <TableCell align="right">Amount</TableCell>
-                    <TableCell align="right">Total price ($)</TableCell>
-                  </TableRow>
-                </TableHead>
-                {/* <TableBody>
-                          {rows.history.map((historyRow) => (
-                            <TableRow key={historyRow.date}>
-                              <TableCell component="th" scope="row">
-                                {historyRow.date}
-                              </TableCell>
-                              <TableCell>{historyRow.customerId}</TableCell>
-                              <TableCell align="right">
-                                {historyRow.amount}
-                              </TableCell>
-                              <TableCell align="right">
-                                {Math.round(
-                                  historyRow.amount * rows.price * 100
-                                ) / 100}
-                              </TableCell>
-                            </TableRow> */}
-                {/* ))} */}
-                {/* </TableBody> */}
-              </Table>
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
-  );
-};
-
-export default function TableView(props) {
-  // const {  query } = props;
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("kode_asuransi");
-  const [page, setPage] = React.useState(0);
 
   const dense = true;
 
-  // const alertContext = React.useContext(AlertContext);
   const dashboardContext = React.useContext(DashboardContext);
-  // const lowercasedFilter = query.toLowerCase();
-  console.log(dashboardContext.state);
-  const a = dashboardContext.state;
-  console.log(a.msisdn);
-  const filteredData = [
-    {
-      caller: "6285813524804",
-      called: "6285888412387",
-      totalCall: 3,
-      duration: 23,
-      callType: "CFW",
-      firstCall: "27/Nov/20",
-      lastCall: "28/Nov/20",
-      deltaDate: 1,
-    },
-  ];
+
+  const [datas, setDatas] = React.useState([]);
+  const [error, setError] = React.useState(true);
+  React.useEffect(() => {
+    if (dashboardContext.state.dashboardFrequency) {
+      setDatas(dashboardContext.state.dashboardFrequency);
+      setError(false);
+    }
+  }, [dashboardContext.state.dashboardFrequency]);
+  const filteredData = datas;
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -367,82 +151,98 @@ export default function TableView(props) {
     setOrderBy(property);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+  const emptyRows =
+    filteredData.length -
+    Math.min(
+      filteredData.length,
+      filteredData.length - page * filteredData.length
+    );
 
-  const emptyRows = 3 - Math.min(3, filteredData.length - (page - 1) * 3);
-  // console.log(rows);
   return (
-    <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <TableContainer>
-          <Table
-            className={classes.table}
-            aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
-            aria-label="enhanced table"
+    <React.Fragment>
+      {error ? (
+        <SkeletonDashboardComponent />
+      ) : (
+        <Paper className={classes.root}>
+          <TableContainer
+            className={clsx({
+              [classes.containerFull]: pagination,
+              [classes.container]: !pagination,
+            })}
           >
-            <AppTableHead
-              classes={classes}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={filteredData.length}
-              headCells={headCells}
-              action={false}
-            />
-            <TableBody>
-              {stableSort(filteredData, getComparator(order, orderBy))
-                .slice(page * 3, page * 3 + 3)
-                .map((row, index) => {
-                  const labelId = `enhanced-table-checkbox-${index}`;
+            <Table stickyHeader aria-label="sticky table" size="small">
+              <TableHeadView
+                classes={classes}
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}
+                rowCount={filteredData.length}
+                headCells={columns}
+                action={false}
+              />
+              <TableBody>
+                {stableSort(filteredData, getComparator(order, orderBy))
+                  .slice(
+                    page * filteredData.length,
+                    page * filteredData.length + filteredData.length
+                  )
+                  .map((row, index) => {
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRowView
-                      row={row}
-                      index={index}
-                      labelId={labelId}
-                      classes={classes}
-                    />
-                  );
-                })}
+                    return (
+                      <TableRowsView
+                        row={row}
+                        index={index}
+                        labelId={labelId}
+                      />
+                    );
+                  })}
 
-              {emptyRows > 0 && (
-                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[3]}
-          component="div"
-          count={filteredData.length}
-          rowsPerPage={3}
-          page={page}
-          onChangePage={handleChangePage}
-          // onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      </Paper>
-      {/* <Box
-        display="flex"
-        justifyContent="flex-end"
-        marginTop="10px"
-        marginBottom="10px"
-      >
-        <Pagination
-          page={page}
-          count={Math.ceil(filteredData.length / 3)}
-          shape="rounded"
-          color="primary"
-          showFirstButton
-          showLastButton
-          // boundaryCount={2}
-          onChange={handleChangePage}
-        />
-      </Box> */}
-    </div>
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              {/* <TableHead>
+            <TableRow>
+              {columns.map((column) => (
+                <TableCell
+                  key={column.id}
+                  align={column.align}
+                  style={{ minWidth: column.minWidth }}
+                >
+                  {column.label}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead> */}
+              {/* <TableBody className={classes.container}>
+            {rows
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => {
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {column.format && typeof value === "number"
+                            ? column.format(value)
+                            : value}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+          </TableBody> */}
+            </Table>
+          </TableContainer>
+        </Paper>
+      )}
+    </React.Fragment>
   );
 }
+
+export default TableView;

@@ -15,6 +15,7 @@ import {
 import { Box, useMediaQuery } from "@material-ui/core";
 import { TableView } from "./components";
 import { makeStyles } from "@material-ui/core/styles";
+import { SkeletonTableScreen } from "components";
 
 const dataBreadcrumbs = [
   { title: "Home", color: "textPrimary", aktif: false },
@@ -40,9 +41,18 @@ const Log = () => {
   const [data, setData] = React.useState([]);
   const [pageRows, setPageRows] = React.useState(5);
   const [query, setQuery] = React.useState("");
+  const [error, setError] = React.useState(true);
   const getData = async () => {
-    const data = await Service.getDataAll();
-    setData(data.data ? data.data : []);
+    try {
+      const data = await Service.getDataAll();
+      setData(data.data ? data.data : []);
+      setError(false);
+    } catch (ex) {
+      if (!ex.response) {
+        setError(true);
+        return true;
+      }
+    }
   };
   const handleChangePageRows = (event) => {
     setPageRows(event.target.value);
@@ -55,45 +65,54 @@ const Log = () => {
   }, []);
   return (
     <AppWrapperBody>
-      <AppBreadcrumbs data={dataBreadcrumbs} />
-      <LoggerContext.Provider
-        value={{
-          state: data,
-          updateState: getData,
-        }}
-      >
-        <div className={classes.tableContainer}>
-          <AppTableToolbar
-            title="Logs"
-            icon={<CheckIcon fontSize="small" />}
-            refresh={() => {
-              console.log("test");
+      {error ? (
+        <SkeletonTableScreen />
+      ) : (
+        <React.Fragment>
+          <AppBreadcrumbs data={dataBreadcrumbs} />
+          <LoggerContext.Provider
+            value={{
+              state: data,
+              updateState: getData,
             }}
-            context={LoggerContext}
-          />
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            padding="5px 15px"
-            flexDirection={matches ? "column-reverse" : "row"}
           >
-            <Box display="flex" alignItems="center">
-              Show{" "}
-              <AppSelectRowTable
-                data={pageRows}
-                handleChange={handleChangePageRows}
+            <div className={classes.tableContainer}>
+              <AppTableToolbar
+                title="Logs"
+                icon={<CheckIcon fontSize="small" />}
+                refresh={() => {
+                  console.log("test");
+                }}
+                context={LoggerContext}
               />
-              entries
-            </Box>
-            <Box display="flex" alignItems="center">
-              <AppSearchField data={query} handleChange={handleChangeSearch} />
-            </Box>
-          </Box>
-          <Box padding="5px 15px">
-            <TableView pageRows={pageRows} query={query} />
-          </Box>
-        </div>
-      </LoggerContext.Provider>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                padding="5px 15px"
+                flexDirection={matches ? "column-reverse" : "row"}
+              >
+                <Box display="flex" alignItems="center">
+                  Show{" "}
+                  <AppSelectRowTable
+                    data={pageRows}
+                    handleChange={handleChangePageRows}
+                  />
+                  entries
+                </Box>
+                <Box display="flex" alignItems="center">
+                  <AppSearchField
+                    data={query}
+                    handleChange={handleChangeSearch}
+                  />
+                </Box>
+              </Box>
+              <Box padding="5px 15px">
+                <TableView pageRows={pageRows} query={query} />
+              </Box>
+            </div>
+          </LoggerContext.Provider>
+        </React.Fragment>
+      )}
     </AppWrapperBody>
   );
 };

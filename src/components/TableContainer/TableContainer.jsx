@@ -4,7 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   container: {
     width: "100%",
-    minHeight: "200px",
+    maxHeight: 230,
+    minHeight: 230,
     border: "1px solid #C8CED3",
     borderTopLeftRadius: "5px",
     borderTopRightRadius: "5px",

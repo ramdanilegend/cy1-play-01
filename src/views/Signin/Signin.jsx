@@ -5,6 +5,9 @@ import img from "assets/img/login-image.jpg";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { Redirect } from "react-router-dom";
+import auth from "services/AuthService";
+import { Formik, validateYupSchema } from "formik";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -84,6 +87,8 @@ const LinkBehavior = React.forwardRef((props, ref) => (
 const Signin = () => {
   const classes = useStyles();
   const matches = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  console.log(auth.getCurrentUser());
+  if (auth.getCurrentUser()) return <Redirect to="/analysis-result" />;
   return (
     <div className={classes.root}>
       <Grid container>
@@ -96,30 +101,80 @@ const Signin = () => {
           </div>
         </Grid>
         <Grid item xl={6} lg={6} md={6} sm={12} xs={12}>
-          <div className={classes.loginBox}>
-            <div className={classes.loginCard}>
-              <Box display="flex" alignItems="center" justifyContent="center">
-                Welcome !
-              </Box>
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                marginBottom="20px"
-              >
-                Sign In to You're Account
-              </Box>
+          <Formik
+            initialValues={{ username: "", password: "" }}
+            validate={(values) => {
+              const errors = {};
+              return errors;
+            }}
+            onSubmit={async (values, { setSubmitting }) => {
+              try {
+                const response = await auth.login(values);
+                window.location = "/cdr-analytic-system";
+                auth.loginWithJwt(response.headers["Authorization"]);
+              } catch (ex) {
+                if (ex.response && ex.response.status === 400) {
+                }
+              }
+              setSubmitting(false);
+            }}
+          >
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              isSubmitting,
+              /* and other goodies */
+            }) => (
+              <form onSubmit={handleSubmit}>
+                <div className={classes.loginBox}>
+                  <div className={classes.loginCard}>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      Welcome !
+                    </Box>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      marginBottom="20px"
+                    >
+                      Sign In to You're Account
+                    </Box>
 
-              <TextField id="standard-basic" label="Username" />
+                    <TextField
+                      id="standard-basic"
+                      label="Username"
+                      type="text"
+                      name="username"
+                      value={values.username}
+                      onChange={handleChange}
+                    />
 
-              <TextField id="standard-basic" label="Password" type="password" />
-              <Box paddingTop="30px"></Box>
+                    <TextField
+                      id="standard-basic"
+                      label="Password"
+                      type="password"
+                      name="password"
+                      value={values.password}
+                      onChange={handleChange}
+                    />
+                    <Box paddingTop="30px"></Box>
 
-              <Button className={classes.btn} component={LinkBehavior}>
-                Masuk
-              </Button>
-            </div>
-          </div>
+                    <Button className={classes.btn} type="submit">
+                      Masuk
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            )}
+          </Formik>
         </Grid>
       </Grid>
     </div>

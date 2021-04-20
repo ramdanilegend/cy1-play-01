@@ -3,7 +3,10 @@ import SearchIcon from "@material-ui/icons/Search";
 import { TextField, Box, Button, InputBase } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import { DatePicker } from "@material-ui/pickers";
+// import { DatePicker } from "@material-ui/pickers";
+import "react-dates/initialize";
+import { DateRangePicker } from "react-dates";
+// import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 
 const useStyles = makeStyles((theme) => ({
   btn: {
@@ -53,60 +56,49 @@ const useStyles = makeStyles((theme) => ({
 const DateRangeIconField = (props) => {
   const classes = useStyles();
   const { label, icon } = props;
-  const [selectedDate, handleDateChange] = React.useState(null);
+  const [startDate, setStartDate] = React.useState(null);
+  const [endDate, setEndDate] = React.useState(null);
+  const [focus, setFocus] = React.useState(false);
+  function onDatesChange({ startDate, endDate }) {
+    setStartDate(startDate);
+    setEndDate(endDate);
+  }
+
+  function onFocusChange(focusedInput) {
+    setFocus(focusedInput);
+  }
   return (
-    <Box display="flex">
-      <Button
-        variant="outlined"
-        // color="default"
-        disabled
-        className={classes.btn}
-        classes={{
-          root: classes.btnRoot,
-          outlined: classes.btnOutlined,
-          disabled: classes.disabled,
-        }}
-        size="small"
-      >
-        {icon}
-      </Button>
-      <DatePicker
-        className={classes.datePicker}
-        classes={{ root: classes.dateOutline }}
-        // label="Basic example"
-        value={selectedDate}
-        onChange={handleDateChange}
-        animateYearScrolling
-        emptyLabel="........"
-        inputVariant="outlined"
-        size="small"
-      />
-      <Button
-        variant="outlined"
-        // color="default"
-        disabled
-        className={classes.btn}
-        classes={{
-          root: classes.btnRoot,
-          outlined: classes.btnOutlinedArrow,
-          disabled: classes.disabledArrow,
-        }}
-        size="small"
-      >
-        <ArrowForwardIcon />
-      </Button>
-      <DatePicker
-        className={classes.datePicker}
-        classes={{ root: classes.dateOutline2 }}
-        // label="Basic example"
-        value={selectedDate}
-        onChange={handleDateChange}
-        animateYearScrolling
-        emptyLabel="........"
-        inputVariant="outlined"
-        size="small"
-      />
-    </Box>
+    <React.Fragment>
+      <Box display="flex">
+        <Button
+          variant="outlined"
+          // color="default"
+          disabled
+          className={classes.btn}
+          classes={{
+            root: classes.btnRoot,
+            outlined: classes.btnOutlined,
+            disabled: classes.disabled,
+          }}
+          size="small"
+        >
+          {icon}
+        </Button>
+        <Box display="block" width="100%">
+          <DateRangePicker
+            // {...props}
+            onDatesChange={onDatesChange}
+            onFocusChange={onFocusChange}
+            focusedInput={focus}
+            startDate={startDate}
+            endDate={endDate}
+            small={true}
+            block={true}
+            customArrowIcon={<ArrowForwardIcon />}
+          />
+        </Box>
+      </Box>
+    </React.Fragment>
   );
 };
 

@@ -44,3 +44,25 @@ code {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
+.DateRangePickerInput {
+  background-color: transparent !important;
+  padding: 3px 0;
+}
+/* 
+.DateRangePicker {
+  display: flex !important;
+}
+
+.DateRangePickerInput__block {
+  display: flex !important;
+  align-items: center;
+  width: 100%;
+}
+.DateRangePickerInput_arrow {
+  display: flex !important;
+  align-items: center;
+}
+.DateInput {
+  display: flex !important;
+  align-items: center;
+} */

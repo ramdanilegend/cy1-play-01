@@ -113,11 +113,11 @@ function TabsView(props) {
             scrollable: classes.scrollable,
           }}
         >
-          {data.map((value, index) => (
+          {data.map((value) => (
             <Tab
               label={value.label}
               icon={value.icon}
-              key={index}
+              key={value.index}
               {...a11yProps(0)}
               classes={{
                 wrapper: classes.wrapper,
@@ -129,7 +129,7 @@ function TabsView(props) {
         </Tabs>
       </AppBar>
       {data.map((values, index) => (
-        <TabPanel value={value} index={index}>
+        <TabPanel value={value} index={index} key={value.index}>
           {values.component}
         </TabPanel>
       ))}

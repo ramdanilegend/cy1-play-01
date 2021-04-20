@@ -184,6 +184,7 @@ export default function TableView(props) {
   const alertContext = React.useContext(AlertContext);
   const userContext = React.useContext(UserContext);
   const lowercasedFilter = query.toLowerCase();
+
   const filteredData = userContext.state.filter((value) => {
     return (
       value.name.toLowerCase().includes(lowercasedFilter) ||

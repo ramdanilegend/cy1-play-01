@@ -142,7 +142,7 @@ const LinkBehavior = React.forwardRef((props, ref) => (
 ));
 
 export default function TableView(props) {
-  const { pageRows, query } = props;
+  const { pageRows, query, page, handleChangePage } = props;
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("kode_asuransi");
@@ -150,7 +150,6 @@ export default function TableView(props) {
     dialogDelete: false,
     id: "",
   });
-  const [page, setPage] = React.useState(1);
 
   const dense = true;
 
@@ -172,10 +171,6 @@ export default function TableView(props) {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
-  };
-
-  const handleChangePage = (event, value) => {
-    setPage(value);
   };
 
   const emptyRows =

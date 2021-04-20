@@ -10,6 +10,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DayUtils from "@date-io/dayjs";
 import "react-perfect-scrollbar/dist/css/styles.css";
+import "react-dates/lib/css/_datepicker.css";
+// import "tippy.js/dist/tippy.css";
 
 const browserHistory = createBrowserHistory();
 

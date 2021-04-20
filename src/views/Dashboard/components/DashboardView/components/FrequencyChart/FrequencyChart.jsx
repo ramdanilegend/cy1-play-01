@@ -1,83 +1,82 @@
 import React from "react";
+
 import { AppTableToolbar, TableContainer } from "components";
 import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import { Box } from "@material-ui/core";
+  Chart,
+  LineController,
+  LinearScale,
+  PointElement,
+  LineElement,
+  CategoryScale,
+} from "chart.js";
 
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+const FrequencyChart = (props) => {
+  const { data } = props;
+  const chartRef = React.createRef();
 
-const FrequencyChart = () => {
+  Chart.register(
+    LineController,
+    LinearScale,
+    PointElement,
+    LineElement,
+    CategoryScale
+  );
+  React.useEffect(() => {
+    if (data) {
+      const myChartRef = chartRef.current.getContext("2d");
+      let count = [];
+      let number = [];
+
+      if (data.length > 10) {
+        data.sort((a, b) => {
+          return b.totalCall - a.totalCall;
+        });
+        const dataTopTen = data.slice(0, 10);
+        dataTopTen.sort((a, b) => {
+          return a.totalCall - b.totalCall;
+        });
+        dataTopTen.map((value) => {
+          count.push(value.totalCall);
+          number.push(value.called);
+        });
+      } else {
+        data.sort((a, b) => {
+          return a.totalCall - b.totalCall;
+        });
+        data.map((value) => {
+          count.push(value.totalCall);
+          number.push(value.called);
+        });
+      }
+
+      const dataChart = {
+        labels: number,
+        datasets: [
+          {
+            label: "Total Call ",
+            data: count,
+            fill: false,
+            borderColor: "rgb(75, 192, 192)",
+            tension: 0.1,
+          },
+        ],
+      };
+      const options = {
+        responsive: true,
+      };
+      new Chart(myChartRef, {
+        type: "line",
+        data: dataChart,
+        // options: options,
+      });
+    }
+  }, [data]);
   return (
     <TableContainer>
-      <Box height="265px">
-        <AppTableToolbar title="Frequency Chart" />
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            width={730}
-            height={250}
-            data={data}
-            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-          </LineChart>
-        </ResponsiveContainer>
-      </Box>
+      <AppTableToolbar title="Frequency Chart" />
+      <div style={{ display: "flex", overflow: "auto" }}>
+        <canvas ref={chartRef} width="600" height="200" />
+      </div>
     </TableContainer>
   );
 };

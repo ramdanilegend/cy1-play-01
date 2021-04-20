@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import clsx from "clsx";
 import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles, withStyles } from "@material-ui/styles";
 import {
   AppBar,
   Toolbar,
@@ -16,12 +16,23 @@ import {
   DialogTitle,
   Divider,
   Button,
+  Menu,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/NotificationsOutlined";
 import InputIcon from "@material-ui/icons/Input";
 import Avatar from "@material-ui/core/Avatar";
 import Logo from "assets/img/ria.png";
+import FaceIcon from "@material-ui/icons/Face";
+
+import MenuItem from "@material-ui/core/MenuItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import DraftsIcon from "@material-ui/icons/Drafts";
+import SendIcon from "@material-ui/icons/Send";
+import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
+import AuthService from "services/AuthService";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,22 +50,55 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const StyledMenu = withStyles({
+  paper: {
+    border: "1px solid #d3d4d5",
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "center",
+    }}
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "center",
+    }}
+    {...props}
+  />
+));
+
+const StyledMenuItem = withStyles((theme) => ({
+  root: {
+    "&:focus": {
+      backgroundColor: theme.palette.primary.main,
+      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
+        color: theme.palette.common.white,
+      },
+    },
+  },
+}))(MenuItem);
+
 const Topbar = (props) => {
   const { className, onSidebarOpen, ...rest } = props;
 
   const classes = useStyles();
 
-  const [notifications] = useState([]);
-  // const [notifications] = useState([]);
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const [openLogout, setOpenLogout] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpenLogout(true);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
-    setOpenLogout(false);
+    setAnchorEl(null);
+  };
+
+  const logOut = async () => {
+    await AuthService.logout(AuthService.getCurrentUser().id);
+    window.location = "/";
   };
   return (
     <AppBar {...rest} className={clsx(classes.root, className)}>
@@ -76,10 +120,30 @@ const Topbar = (props) => {
           <IconButton
             className={classes.signOutButton}
             color="inherit"
-            onClick={handleClickOpen}
+            onClick={handleClick}
           >
-            <InputIcon />
+            <FaceIcon color="action" />
           </IconButton>
+          <StyledMenu
+            id="customized-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <StyledMenuItem>
+              <ListItemIcon>
+                <FaceIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Profile" />
+            </StyledMenuItem>
+            <StyledMenuItem onClick={logOut}>
+              <ListItemIcon>
+                <MeetingRoomIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Exit App" />
+            </StyledMenuItem>
+          </StyledMenu>
         </Hidden>
         <Hidden lgUp>
           <IconButton onClick={onSidebarOpen}>

@@ -36,21 +36,25 @@ const dataTab = [
     label: "Dashboard",
     icon: <DonutLargeOutlinedIcon />,
     component: <DashboardView />,
+    index: 1,
   },
   {
     label: "Analytic",
     icon: <AssessmentOutlinedIcon />,
     component: <AnalyticView />,
+    index: 2,
   },
   {
     label: "Geo Analytic",
     icon: <PersonPinCircleOutlinedIcon />,
     component: <GeoAnalyticView />,
+    index: 3,
   },
   {
     label: "Link Chart",
     icon: <TrendingUpOutlinedIcon />,
     component: <LinkChartView />,
+    index: 4,
   },
 ];
 
