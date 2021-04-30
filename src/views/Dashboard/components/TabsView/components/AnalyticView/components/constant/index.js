@@ -1,0 +1,15 @@
+export { default as columnDailyCall } from "./columnDailyCall";
+export { default as columnDetailCall } from "./columnDetailCall";
+export { default as columnWeeklyCall } from "./columnWeeklyCall";
+export { default as columnMonthlyCaller } from "./columnMonthlyCaller";
+export { default as columnHourlyCall } from "./columnHourlyCall";
+export { default as columnDailyCalled } from "./columnDailyCalled";
+export { default as columnDetailCalled } from "./columnDetailCalled";
+export { default as columnWeeklyCalled } from "./columnWeeklyCalled";
+export { default as columnMonthlyCalled } from "./columnMonthlyCalled";
+export { default as columnHourlyCalled } from "./columnHourlyCalled";
+export { default as columnDetailImeiCall } from "./columnDetailImeiCall";
+export { default as columnHourlyImeiCall } from "./columnHourlyImeiCall";
+export { default as columnDetailImeiCalled } from "./columnDetailImeiCalled";
+export { default as columnHourlyImeiCalled } from "./columnHourlyImeiCalled";
+export { default as columnSimPhone } from "./columnSimPhone";

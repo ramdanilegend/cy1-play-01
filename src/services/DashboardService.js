@@ -3,46 +3,52 @@ import { apiUrl } from "../config.json";
 
 const apiEndpoint = apiUrl + "/dashboard";
 
-// export function getDataAll() {
-//   return http.get(apiEndpoint);
-// }
-
-export function postData() {
-  return http.post(
-    apiEndpoint,
-    {
-      msisdn: 6285813524804,
-      daterangepicker: "04/05/2019 - 04/05/2021",
-      datetime: null,
-    }
-    // {
-    //   headers: {
-    //     "http.cors.allow-headers":
-    //       "X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization",
-    //   },
-    // }
-  );
+export function postSearchAnalytic(msisdn, date) {
+  return http.post(apiEndpoint, {
+    msisdn: msisdn,
+    daterangepicker: date,
+  });
 }
-// export function putData(id, data) {
-//   return http.put(apiEndpoint + `/${id}`, {
-//     kode_kantor_pusat: data.kode_kantor_pusat,
-//     nama_kantor_pusat: data.nama_kantor_pusat,
-//     alamat: data.alamat,
-//     email: data.email,
-//     no_perjanjian: data.no_perjanjian,
-//     masa_pks: data.masa_pks,
-//     MasterBrokerId: data.MasterBrokerId,
-//   });
-// }
+export function postData(msisdn, date) {
+  return http.post(apiEndpoint, {
+    msisdn: msisdn,
+    daterangepicker: date,
+  });
+}
+export function postDropdownDetail(data) {
+  return http.post(apiUrl + "/breakdownByNumber", {
+    ANumber: data.ANumber,
+    daterangepicker: data.daterangepicker,
+    BNumber: data.BNumber,
+    Calltype: data.Calltype,
+  });
+}
 
-// export function deleteData(id) {
-//   return http.delete(apiEndpoint + `/${id}`);
-// }
+export function postDropdownDay(data) {
+  return http.post(apiUrl + "/breakdownByMsisdn", {
+    msisdn: data.msisdn,
+    daterangepicker: data.daterangepicker,
+    ASitename: data.ASitename,
+    startname: "06:00:00",
+    endtime: "18:00:00",
+  });
+}
+
+export function postDropdownNight(data) {
+  return http.post(apiUrl + "/breakdownByMsisdn", {
+    msisdn: data.msisdn,
+    daterangepicker: data.daterangepicker,
+    ASitename: data.ASitename,
+    startname: "18:01:00",
+    endtime: "05:59:00",
+  });
+}
 
 const DashboardService = {
-  //   getDataAll,
+  postSearchAnalytic,
+  postDropdownDetail,
   postData,
-  //   putData,
-  //   deleteData,
+  postDropdownDay,
+  postDropdownNight,
 };
 export default DashboardService;

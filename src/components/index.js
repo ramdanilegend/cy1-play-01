@@ -23,3 +23,4 @@ export { default as SkeletonTableScreen } from "./SkeletonTableScreen";
 export { default as SkeletonDashboardScreen } from "./SkeletonDashboardScreen";
 export { default as SkeletonDashboardComponent } from "./SkeletonDashboardComponent";
 export { default as AppDialogSessionEnd } from "./DialogSessionEnd";
+export { default as AppSelect } from "./AppSelect";

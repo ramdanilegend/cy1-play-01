@@ -6,6 +6,7 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 // import { DatePicker } from "@material-ui/pickers";
 import "react-dates/initialize";
 import { DateRangePicker } from "react-dates";
+import { useFormikContext } from "formik";
 // import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 
 const useStyles = makeStyles((theme) => ({
@@ -55,18 +56,18 @@ const useStyles = makeStyles((theme) => ({
 
 const DateRangeIconField = (props) => {
   const classes = useStyles();
-  const { label, icon } = props;
-  const [startDate, setStartDate] = React.useState(null);
-  const [endDate, setEndDate] = React.useState(null);
+  const { icon, startId, endId } = props;
+  const { values, setFieldValue } = useFormikContext();
   const [focus, setFocus] = React.useState(false);
-  function onDatesChange({ startDate, endDate }) {
-    setStartDate(startDate);
-    setEndDate(endDate);
-  }
 
   function onFocusChange(focusedInput) {
     setFocus(focusedInput);
   }
+
+  const change = ({ startDate, endDate }) => {
+    setFieldValue("startDate", startDate);
+    setFieldValue("endDate", endDate);
+  };
   return (
     <React.Fragment>
       <Box display="flex">
@@ -87,14 +88,19 @@ const DateRangeIconField = (props) => {
         <Box display="block" width="100%">
           <DateRangePicker
             // {...props}
-            onDatesChange={onDatesChange}
+            onDatesChange={change}
             onFocusChange={onFocusChange}
             focusedInput={focus}
-            startDate={startDate}
-            endDate={endDate}
+            startDate={values.startDate}
+            endDate={values.endDate}
             small={true}
             block={true}
-            customArrowIcon={<ArrowForwardIcon />}
+            startDateId={startId} // PropTypes.string.isRequired,
+            endDateId={endId} // PropTypes.string.isRequired,
+            minimumNights={0}
+            showClearDates={true}
+            enableOutsideDays={true}
+            isOutsideRange={() => false}
           />
         </Box>
       </Box>

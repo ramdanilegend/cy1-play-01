@@ -165,7 +165,7 @@ function Sidebar() {
             <List>
               <SidebarItem
                 href="analysis-result"
-                title="Analysis Result"
+                title="Recent Analytic"
                 icon={<AssessmentIcon color="secondary" />}
               />
               <SidebarItem

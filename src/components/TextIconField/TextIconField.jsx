@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TextIconField = (props) => {
   const classes = useStyles();
-  const { label, icon } = props;
+  const { label, icon, name, value, handleChange = () => {} } = props;
   return (
     <Box display="flex">
       <Button
@@ -51,6 +51,9 @@ const TextIconField = (props) => {
         variant="outlined"
         size="small"
         fullWidth
+        name={name}
+        value={value}
+        onChange={handleChange}
         // className={classes.fieldRoot}
         classes={{ root: classes.fieldRoot }}
       />

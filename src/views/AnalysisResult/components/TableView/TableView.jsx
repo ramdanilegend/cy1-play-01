@@ -119,7 +119,7 @@ const headCells = [
     id: "analysis_name",
     numeric: false,
     disablePadding: false,
-    label: "Analysis Result",
+    label: "Recent Analytic",
   },
   {
     id: "category",

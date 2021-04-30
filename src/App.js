@@ -7,8 +7,6 @@ import context from "context/AlertContext";
 import theme from "./theme";
 import Routes from "./routes";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DayUtils from "@date-io/dayjs";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import "react-dates/lib/css/_datepicker.css";
 // import "tippy.js/dist/tippy.css";
@@ -31,20 +29,18 @@ function App() {
       <CssBaseline />
       <ThemeProvider theme={theme}>
         <Router history={browserHistory}>
-          <MuiPickersUtilsProvider utils={DayUtils}>
-            <context.Provider value={{ state: open, updateState: updateValue }}>
-              <Routes />
-              <Alert
-                backdrop={open.backdrop}
-                snackbar={open.snackbar}
-                message={open.message}
-                variant={open.variant}
-                updateState={() => {
-                  updateValue(false, false, "info", "");
-                }}
-              />
-            </context.Provider>
-          </MuiPickersUtilsProvider>
+          <context.Provider value={{ state: open, updateState: updateValue }}>
+            <Routes />
+            <Alert
+              backdrop={open.backdrop}
+              snackbar={open.snackbar}
+              message={open.message}
+              variant={open.variant}
+              updateState={() => {
+                updateValue(false, false, "info", "");
+              }}
+            />
+          </context.Provider>
         </Router>
       </ThemeProvider>
     </React.Fragment>

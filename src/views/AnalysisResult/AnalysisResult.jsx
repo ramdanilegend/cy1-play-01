@@ -21,7 +21,7 @@ import { SkeletonTableScreen, AppDialogSessionEnd } from "components";
 const dataBreadcrumbs = [
   { title: "Home", color: "textPrimary", aktif: false },
   { title: "Admin", color: "textPrimary", aktif: false },
-  { title: "Analysis Result", color: "textPrimary", aktif: true },
+  { title: "Recent Analytic", color: "textPrimary", aktif: true },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -90,7 +90,7 @@ const AnalysisResult = () => {
             >
               <div className={classes.tableContainer}>
                 <AppTableToolbar
-                  title="Analysis Result"
+                  title="Recent Analytic"
                   icon={<CheckIcon fontSize="small" />}
                   refresh={() => {
                     console.log("test");
