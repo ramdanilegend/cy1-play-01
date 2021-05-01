@@ -17,7 +17,7 @@ import {
   TableContainer,
   Link,
 } from "@material-ui/core";
-import DashboardService from "services/DashboardService";
+import AnalyticService from "services/AnalyticService";
 // import AnalyticService from "services/AnalyticService";
 import { makeStyles } from "@material-ui/core/styles";
 import { Skeleton } from "@material-ui/lab";
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
   tableContainer: {
     width: "100%",
-    maxHeight: 100,
+    maxHeight: 300,
     // maxWidth: 700,
     overflowX: "hidden",
     direction: "rtl",
@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TableRowsCall = (props) => {
-  const { row, index, labelId, caller = true } = props;
+  const { row, index, labelId, caller = true, query } = props;
   const dashboardContext = React.useContext(DashboardContext);
   const [open, setOpen] = React.useState(false);
   const [dataDropdown, setDataDropdown] = React.useState([]);
@@ -82,13 +82,11 @@ const TableRowsCall = (props) => {
     setOpen(!open);
     if (!open) {
       try {
-        const getData = await DashboardService.postDropdownDetail({
+        const respone = await AnalyticService.postDropdownCaller({
           ANumber: data.caller,
-          BNumber: data.called,
           daterangepicker: dashboardContext.state.dashboardView.daterangepicker,
-          Calltype: data.callType,
         });
-        setDataDropdown(getData.data.tabledatahits);
+        setDataDropdown(respone.data.tabledatahits);
         setTimeout(() => {
           setError(false);
         }, [500]);
@@ -98,6 +96,9 @@ const TableRowsCall = (props) => {
       }
     }
   };
+  React.useEffect(() => {
+    setOpen(false);
+  }, [query]);
 
   return (
     <React.Fragment>
@@ -193,9 +194,6 @@ const TableRowsCall = (props) => {
             ) : (
               <Box margin={1} width="100%" display="flex" maxHeight={700}>
                 <TableContainer className={classes.tableContainer}>
-                  {/* <Typography variant="h6" gutterBottom component="div">
-                History
-              </Typography> */}
                   <Table
                     stickyHeader
                     size="small"
@@ -204,59 +202,122 @@ const TableRowsCall = (props) => {
                   >
                     <TableHead className={classes.tableHeadExpand}>
                       <TableRow>
-                        <TableCell>Caller</TableCell>
-                        <TableCell>Called</TableCell>
-                        <TableCell align="right">Call Date</TableCell>
-                        <TableCell align="right" style={{ minWidth: 120 }}>
+                        <TableCell className={classes.cells}>Caller</TableCell>
+                        <TableCell className={classes.cells}>Called</TableCell>
+                        <TableCell
+                          align="left"
+                          style={{ minWidth: 120 }}
+                          className={classes.cells}
+                        >
+                          Call Date
+                        </TableCell>
+                        <TableCell
+                          align="left"
+                          style={{ minWidth: 120 }}
+                          className={classes.cells}
+                        >
                           Call Time
                         </TableCell>
-                        <TableCell align="right" style={{ minWidth: 120 }}>
+                        <TableCell
+                          align="left"
+                          style={{ minWidth: 120 }}
+                          className={classes.cells}
+                        >
                           Call Type
                         </TableCell>
-                        <TableCell align="right" style={{ minWidth: 120 }}>
-                          Imei 1
+                        <TableCell
+                          align="left"
+                          style={{ minWidth: 120 }}
+                          className={classes.cells}
+                        >
+                          Caller IMEI
                         </TableCell>
-                        <TableCell align="right" style={{ minWidth: 120 }}>
-                          Imei 2
+                        <TableCell
+                          align="left"
+                          style={{ minWidth: 120 }}
+                          className={classes.cells}
+                        >
+                          Called IMEI
                         </TableCell>
-                        <TableCell align="right" style={{ minWidth: 120 }}>
-                          Imsi 1
+                        <TableCell
+                          align="left"
+                          style={{ minWidth: 120 }}
+                          className={classes.cells}
+                        >
+                          Caller IMSI
                         </TableCell>
-                        <TableCell align="right" style={{ minWidth: 120 }}>
-                          Imsi 2
+                        <TableCell
+                          align="left"
+                          style={{ minWidth: 120 }}
+                          className={classes.cells}
+                        >
+                          Called IMSI
                         </TableCell>
-                        <TableCell align="left" style={{ minWidth: 500 }}>
+                        <TableCell
+                          align="left"
+                          style={{ minWidth: 500 }}
+                          className={classes.cells}
+                        >
                           Site Name
                         </TableCell>
-                        <TableCell align="right">Long/Lat</TableCell>
-                        <TableCell align="right">Link</TableCell>
+                        <TableCell
+                          align="left"
+                          style={{ minWidth: 120 }}
+                          className={classes.cells}
+                        >
+                          Duration
+                        </TableCell>
+                        <TableCell align="left" className={classes.cells}>
+                          Long/Lat
+                        </TableCell>
+                        <TableCell align="left" className={classes.cells}>
+                          Link
+                        </TableCell>
                       </TableRow>
                     </TableHead>
 
                     <TableBody>
                       {dataDropdown.map((dataRow) => (
                         <TableRow key={dataRow.date}>
-                          <TableCell component="th" scope="row">
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            align="right"
+                            className={classes.cells}
+                          >
                             {dataRow.caller}
                           </TableCell>
-                          <TableCell>{dataRow.called}</TableCell>
-                          <TableCell align="right">
+                          <TableCell className={classes.cells}>
+                            {dataRow.called}
+                          </TableCell>
+                          <TableCell align="right" className={classes.cells}>
                             {dataRow.callDate}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="right" className={classes.cells}>
                             {dataRow.callTime}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="right" className={classes.cells}>
                             {dataRow.callType}
                           </TableCell>
-                          <TableCell align="right">{dataRow.Aimei}</TableCell>
-                          <TableCell align="right">{dataRow.Bimei}</TableCell>
-                          <TableCell align="right">{dataRow.Aimsi}</TableCell>
-                          <TableCell align="right">{dataRow.Bimsi}</TableCell>
-                          <TableCell align="left">
+                          <TableCell align="right" className={classes.cells}>
+                            {dataRow.AImei}
+                          </TableCell>
+                          <TableCell align="right" className={classes.cells}>
+                            {dataRow.BImei}
+                          </TableCell>
+                          <TableCell align="right" className={classes.cells}>
+                            {dataRow.AImsi}
+                          </TableCell>
+                          <TableCell align="right" className={classes.cells}>
+                            {dataRow.BImsi}
+                          </TableCell>
+                          <TableCell align="left" className={classes.cells}>
                             {dataRow.ASitename}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="right" className={classes.cells}>
+                            {dataRow.duration}
+                          </TableCell>
+                          <TableCell align="right" className={classes.cells}>
                             {clsx({
                               [row.Alongitude + "," + row.Alatitude]:
                                 row.Alongitude && row.Alatitude,
@@ -267,7 +328,7 @@ const TableRowsCall = (props) => {
                               [""]: !row.Alongitude && !row.Alatitude,
                             })}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align="right" className={classes.cells}>
                             <Link
                               href={`https://www.google.com/maps/?q=${row.Alatitude},${row.Alongitude}`}
                               target="_blank"

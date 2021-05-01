@@ -105,9 +105,11 @@ const AnalyticView = () => {
   const handleClose = () => {
     setOpen(false);
     setPage(1);
+    setQuery("");
   };
 
   const handleChangeCaller = async (e) => {
+    setQuery("");
     setPage(1);
     setSelect({
       ...select,
@@ -147,6 +149,7 @@ const AnalyticView = () => {
   };
 
   const handleChangeCalled = (e) => {
+    setQuery("");
     setPage(1);
     setSelect({
       ...select,
@@ -184,6 +187,7 @@ const AnalyticView = () => {
   };
 
   const handleChangeImei = (e) => {
+    setQuery("");
     setPage(1);
     setSelect({
       ...select,
@@ -221,6 +225,7 @@ const AnalyticView = () => {
   };
 
   const handleChangePhone = (e) => {
+    setQuery("");
     setPage(1);
     setSelect({
       ...select,
@@ -574,6 +579,7 @@ const AnalyticView = () => {
           icon={<CheckIcon fontSize="small" />}
           handleClick={() => {
             setOpen(true);
+            setPageRows(25);
           }}
         />
         <Box
@@ -605,8 +611,27 @@ const AnalyticView = () => {
           detail={tableSelect.detailCall}
         />
       </Box>
-      <AppDialogFull title={"Frequency"} open={open} handleClose={handleClose}>
+      <AppDialogFull title={titleToolbar} open={open} handleClose={handleClose}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          padding="5px 15px"
+          flexDirection={matches ? "column-reverse" : "row"}
+        >
+          <Box display="flex" alignItems="center">
+            Show
+            <AppSelectRowTable
+              data={pageRows}
+              handleChange={handleChangePageRows}
+            />
+            entries
+          </Box>
+          <Box display="flex" alignItems="center">
+            <AppSearchField data={query} handleChange={handleChangeSearch} />
+          </Box>
+        </Box>
         <TableView
+          fullscreen={open}
           pageRows={pageRows}
           column={columnSelect}
           page={page}

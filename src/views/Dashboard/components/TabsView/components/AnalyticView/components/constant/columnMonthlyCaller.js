@@ -8,10 +8,17 @@ const columnMonthlyCall = [
   },
   {
     id: "caller",
-    numeric: true,
+    numeric: false,
     disablePadding: true,
     label: "Caller",
     minWidth: 120,
+  },
+  {
+    id: "totalCall",
+    numeric: true,
+    disablePadding: true,
+    label: "TotalCall",
+    minWidth: 90,
   },
   {
     id: "1",
@@ -96,14 +103,6 @@ const columnMonthlyCall = [
     disablePadding: true,
     label: "12",
     minWidth: 20,
-  },
-
-  {
-    id: "totalCall",
-    numeric: true,
-    disablePadding: true,
-    label: "TotalCall",
-    minWidth: 90,
   },
 ];
 

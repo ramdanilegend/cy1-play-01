@@ -78,6 +78,12 @@ export function postHourlyCalled(data) {
     daterangepicker: data.daterangepicker,
   });
 }
+export function postDropdownCalled(data) {
+  return http.post(apiUrl + "/breakdownByNumber", {
+    BNumber: data.BNumber,
+    daterangepicker: data.daterangepicker,
+  });
+}
 
 //Imei
 export function postDetailImeiCaller(data) {
@@ -134,6 +140,7 @@ const AnalyticService = {
   postWeeklyCalled,
   postMonthlyCalled,
   postHourlyCalled,
+  postDropdownCalled,
 
   //   imei,
   postDetailImeiCaller,

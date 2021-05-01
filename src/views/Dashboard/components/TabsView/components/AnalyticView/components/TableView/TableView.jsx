@@ -27,6 +27,7 @@ import {
 } from "./components";
 
 import Pagination from "@material-ui/lab/Pagination";
+import clsx from "clsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +42,10 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     maxHeight: 300,
+  },
+  containerFull: {
+    maxHeight: "70vh",
+    minHeight: "70vh",
   },
   visuallyHidden: {
     border: 0,
@@ -112,6 +117,7 @@ const StyledTableRow = withStyles((theme) => ({
 
 export default function TableView(props) {
   const {
+    fullscreen,
     pageRows,
     query,
     page,
@@ -539,8 +545,15 @@ export default function TableView(props) {
       if (value.caller) {
         return (
           value.caller.toLowerCase().includes(lowercasedFilter) ||
+          value.imeiName.toLowerCase().includes(lowercasedFilter)
+        );
+      }
+    }
+    if (tableSelect.phoneSim) {
+      if (value.imeiName) {
+        return (
           value.imeiName.toLowerCase().includes(lowercasedFilter) ||
-          value.totalImei.toString().toLowerCase().includes(lowercasedFilter)
+          value.caller.toLowerCase().includes(lowercasedFilter)
         );
       }
     }
@@ -567,9 +580,15 @@ export default function TableView(props) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <TableContainer className={classes.container}>
+        <TableContainer
+          className={clsx({
+            [classes.containerFull]: fullscreen,
+            [classes.container]: !fullscreen,
+          })}
+        >
           <Table
             className={classes.table}
+            stickyHeader
             aria-labelledby="tableTitle"
             size="small"
             aria-label="enhanced table"
@@ -592,6 +611,7 @@ export default function TableView(props) {
                   if (tableSelect.detailCall) {
                     return (
                       <TableRowsView
+                        query={query}
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -601,6 +621,7 @@ export default function TableView(props) {
                   if (tableSelect.dailyCall) {
                     return (
                       <TableRowsCall
+                        query={query}
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -610,6 +631,7 @@ export default function TableView(props) {
                   if (tableSelect.weeklyCall) {
                     return (
                       <RowsWeeklyCall
+                        query={query}
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -618,7 +640,8 @@ export default function TableView(props) {
                   }
                   if (tableSelect.monthlyCall) {
                     return (
-                      <RowsMonthlyCalled
+                      <RowsMonthlyCall
+                        query={query}
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -628,6 +651,7 @@ export default function TableView(props) {
                   if (tableSelect.hourlyCall) {
                     return (
                       <RowsHourlyCall
+                        query={query}
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -637,6 +661,7 @@ export default function TableView(props) {
                   if (tableSelect.detailCalled) {
                     return (
                       <TableRowsView
+                        query={query}
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -647,6 +672,7 @@ export default function TableView(props) {
                   if (tableSelect.dailyCalled) {
                     return (
                       <RowsDailyCalled
+                        query={query}
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -657,6 +683,7 @@ export default function TableView(props) {
                   if (tableSelect.weeklyCalled) {
                     return (
                       <RowsWeeklyCalled
+                        query={query}
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -666,6 +693,7 @@ export default function TableView(props) {
                   if (tableSelect.monthlyCalled) {
                     return (
                       <RowsMonthlyCalled
+                        query={query}
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -675,6 +703,7 @@ export default function TableView(props) {
                   if (tableSelect.hourlyCalled) {
                     return (
                       <RowsHourlyCall
+                        query={query}
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -685,6 +714,7 @@ export default function TableView(props) {
                   if (tableSelect.detailImeiCaller) {
                     return (
                       <RowsDetailImeiCall
+                        query={query}
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -695,6 +725,7 @@ export default function TableView(props) {
                   if (tableSelect.hourlyImeiCaller) {
                     return (
                       <RowsHourlyImei
+                        query={query}
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -704,6 +735,7 @@ export default function TableView(props) {
                   if (tableSelect.detailImeiCalled) {
                     return (
                       <RowsDetailImeiCall
+                        query={query}
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -714,6 +746,7 @@ export default function TableView(props) {
                   if (tableSelect.hourlyImeiCalled) {
                     return (
                       <RowsHourlyImei
+                        query={query}
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -722,12 +755,22 @@ export default function TableView(props) {
                   }
                   if (tableSelect.phoneSim) {
                     return (
-                      <RowsSimPhone row={row} index={index} labelId={labelId} />
+                      <RowsSimPhone
+                        row={row}
+                        index={index}
+                        labelId={labelId}
+                        query={query}
+                      />
                     );
                   }
                   if (tableSelect.simPhone) {
                     return (
-                      <RowsPhoneSim row={row} index={index} labelId={labelId} />
+                      <RowsPhoneSim
+                        row={row}
+                        index={index}
+                        labelId={labelId}
+                        query={query}
+                      />
                     );
                   }
                 })}

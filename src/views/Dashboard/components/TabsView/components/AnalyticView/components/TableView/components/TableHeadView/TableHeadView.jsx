@@ -13,6 +13,7 @@ import clsx from "clsx";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: "#fafafa",
+    zIndex: 1000,
   },
   cells: {
     color: "ffffff",
@@ -81,30 +82,6 @@ function AppTableHead(props) {
             </TableSortLabel>
           </TableCell>
         ))}
-        {/* {detail && (
-          <TableCell
-            key={"deltaDate"}
-            align="center"
-            padding="none"
-            sortDirection={orderBy === "deltaDate" ? order : false}
-            className={clsx(classes.cells, classes.root, classes.padding)}
-            style={{ minWidth: 120, paddingLeft: "10px" }}
-          >
-            <TableSortLabel
-              active={orderBy === "deltaDate"}
-              direction={orderBy === "deltaDate" ? order : "asc"}
-              onClick={createSortHandler("deltaDate")}
-              IconComponent={KeyboardArrowDownIcon}
-            >
-              {"\u0394"}
-              {orderBy === "deltaDate" ? (
-                <span className={classes.visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </span>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        )} */}
       </TableRow>
     </TableHead>
   );
