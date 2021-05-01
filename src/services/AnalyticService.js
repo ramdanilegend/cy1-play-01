@@ -36,6 +36,13 @@ export function postHourlyCaller(data) {
   });
 }
 
+export function postDropdownCaller(data) {
+  return http.post(apiUrl + "/breakdownByNumber", {
+    ANumber: data.ANumber,
+    daterangepicker: data.daterangepicker,
+  });
+}
+
 //Called
 export function postDetailCalled(data) {
   return http.post(apiUrl + "/analyticCalledDetail", {
@@ -119,6 +126,7 @@ const AnalyticService = {
   postWeeklyCaller,
   postMonthlyCaller,
   postHourlyCaller,
+  postDropdownCaller,
 
   // called
   postDetailCalled,
