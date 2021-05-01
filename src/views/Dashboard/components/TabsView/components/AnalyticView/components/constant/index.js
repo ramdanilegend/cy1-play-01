@@ -13,3 +13,4 @@ export { default as columnHourlyImeiCall } from "./columnHourlyImeiCall";
 export { default as columnDetailImeiCalled } from "./columnDetailImeiCalled";
 export { default as columnHourlyImeiCalled } from "./columnHourlyImeiCalled";
 export { default as columnSimPhone } from "./columnSimPhone";
+export { default as columnPhoneSim } from "./columnPhoneSim";

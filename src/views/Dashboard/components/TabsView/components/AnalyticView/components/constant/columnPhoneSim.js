@@ -7,17 +7,17 @@ const columnPhone = [
     minWidth: 20,
   },
   {
-    id: "ANumber",
+    id: "imaiName",
     numeric: false,
     disablePadding: true,
-    label: "Called",
+    label: "IMEI",
     minWidth: 120,
   },
   {
-    id: "totalImei",
+    id: "caller",
     numeric: false,
     disablePadding: true,
-    label: "Total Call",
+    label: "Caller",
     minWidth: 120,
   },
 ];

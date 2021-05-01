@@ -10,3 +10,4 @@ export { default as RowsHourlyImei } from "./RowsHourlyImei";
 export { default as RowsSimPhone } from "./RowsSimPhone";
 export { default as RowsWeeklyCalled } from "./RowsWeeklyCalled";
 export { default as RowsMonthlyCalled } from "./RowsMonthlyCalled";
+export { default as RowsPhoneSim } from "./RowsPhoneSim";

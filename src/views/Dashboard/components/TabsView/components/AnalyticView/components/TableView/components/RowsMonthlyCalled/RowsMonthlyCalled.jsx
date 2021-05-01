@@ -77,13 +77,13 @@ const RowsMonthlyCalled = (props) => {
   const [dataDropdown, setDataDropdown] = React.useState([]);
   const classes = useStyles();
   const [error, setError] = React.useState(true);
-  const [cc, setCC] = React.useState("sa");
-  React.useEffect(() => {
-    if (row.called) {
-      console.log(row.called);
-      setCC(row.called);
-    }
-  }, [row.called]);
+  // const [rows, setRows] = React.useState([]);
+  // React.useEffect(() => {
+  //   // if (row) {
+  //   console.log(row);
+  //   setRows(row);
+  //   // }?
+  // }, []);
 
   const getDropdown = async (data) => {
     setOpen(!open);
@@ -127,12 +127,12 @@ const RowsMonthlyCalled = (props) => {
         </TableCell>
         <TableCell
           component="th"
-          id={"das"}
+          id={"dasdasda"}
           scope="row"
           className={classes.cells}
-          align="right"
+          // align="right"
         >
-          {cc}
+          {row["called"] ? row["called"] : row["caller"]}
         </TableCell>
         <TableCell
           component="th"

@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RowsSimPhone = (props) => {
+const RowsPhoneSim = (props) => {
   const { row, index, labelId } = props;
   const dashboardContext = React.useContext(DashboardContext);
   const [open, setOpen] = React.useState(false);
@@ -118,14 +118,7 @@ const RowsSimPhone = (props) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell
-          component="th"
-          id={labelId}
-          scope="row"
-          className={classes.cells}
-        >
-          {row.caller}
-        </TableCell>
+
         <TableCell
           component="th"
           id={labelId}
@@ -133,6 +126,14 @@ const RowsSimPhone = (props) => {
           className={classes.cells}
         >
           {row.imeiName}
+        </TableCell>
+        <TableCell
+          component="th"
+          id={labelId}
+          scope="row"
+          className={classes.cells}
+        >
+          {row.caller}
         </TableCell>
       </TableRow>
       <TableRow>
@@ -246,4 +247,4 @@ const RowsSimPhone = (props) => {
   );
 };
 
-export default RowsSimPhone;
+export default RowsPhoneSim;

@@ -23,6 +23,7 @@ import {
   RowsSimPhone,
   RowsWeeklyCalled,
   RowsMonthlyCalled,
+  RowsPhoneSim,
 } from "./components";
 
 import Pagination from "@material-ui/lab/Pagination";
@@ -37,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
   },
   table: {
     maxWidth: "100%",
+  },
+  container: {
+    maxHeight: 300,
   },
   visuallyHidden: {
     border: 0,
@@ -563,7 +567,7 @@ export default function TableView(props) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <TableContainer>
+        <TableContainer className={classes.container}>
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
@@ -614,7 +618,7 @@ export default function TableView(props) {
                   }
                   if (tableSelect.monthlyCall) {
                     return (
-                      <RowsMonthlyCall
+                      <RowsMonthlyCalled
                         row={row}
                         index={index}
                         labelId={labelId}
@@ -716,9 +720,14 @@ export default function TableView(props) {
                       />
                     );
                   }
-                  if (tableSelect.simPhone) {
+                  if (tableSelect.phoneSim) {
                     return (
                       <RowsSimPhone row={row} index={index} labelId={labelId} />
+                    );
+                  }
+                  if (tableSelect.simPhone) {
+                    return (
+                      <RowsPhoneSim row={row} index={index} labelId={labelId} />
                     );
                   }
                 })}

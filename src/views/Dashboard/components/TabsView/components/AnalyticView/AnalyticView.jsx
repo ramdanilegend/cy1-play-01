@@ -3,12 +3,13 @@ import CheckIcon from "@material-ui/icons/Check";
 import { Divider, useMediaQuery, Box } from "@material-ui/core";
 import {
   AppSelect,
-  AppTableToolbar,
+  AppDialogFull,
   AppSelectRowTable,
   AppSearchField,
 } from "components";
 import {
   TableView,
+  TableToolbarView,
   columnDailyCall,
   columnDetailCall,
   columnWeeklyCall,
@@ -24,6 +25,7 @@ import {
   columnDetailImeiCalled,
   columnHourlyImeiCalled,
   columnSimPhone,
+  columnPhoneSim,
 } from "./components";
 import DashboardContext from "context/DashboardContext";
 import AnalyticService from "services/AnalyticService";
@@ -62,6 +64,7 @@ const selectPhone = [
 const AnalyticView = () => {
   const matches = useMediaQuery((theme) => theme.breakpoints.down("xs"));
   const dashboardContext = React.useContext(DashboardContext);
+  const [open, setOpen] = React.useState(false);
   const [titleToolbar, setTitleToolbar] = React.useState("Caller Detail");
   const [dataSelect, setDataSelect] = React.useState({
     caller: 1,
@@ -98,6 +101,11 @@ const AnalyticView = () => {
   const [pageRows, setPageRows] = React.useState(5);
   const [page, setPage] = React.useState(1);
   const [datas, setDatas] = React.useState([]);
+
+  const handleClose = () => {
+    setOpen(false);
+    setPage(1);
+  };
 
   const handleChangeCaller = async (e) => {
     setPage(1);
@@ -159,7 +167,7 @@ const AnalyticView = () => {
       detailCall: false,
       dailyCall: false,
       weeklyCall: false,
-      monthlyCal: false,
+      monthlyCall: false,
       hourlyCall: false,
       detailCalled: e.target.value === 1 ? true : false,
       dailyCalled: e.target.value === 2 ? true : false,
@@ -196,7 +204,7 @@ const AnalyticView = () => {
       detailCall: false,
       dailyCall: false,
       weeklyCall: false,
-      monthlyCal: false,
+      monthlyCall: false,
       hourlyCall: false,
       detailCalled: false,
       dailyCalled: false,
@@ -233,7 +241,7 @@ const AnalyticView = () => {
       detailCall: false,
       dailyCall: false,
       weeklyCall: false,
-      monthlyCal: false,
+      monthlyCall: false,
       hourlyCall: false,
       detailCalled: false,
       dailyCalled: false,
@@ -459,6 +467,20 @@ const AnalyticView = () => {
         }
       }
     }
+    if (tableSelect.phoneSim) {
+      try {
+        const respone = await AnalyticService.postPhoneSim(
+          dashboardContext.state
+        );
+        setColumnSelect(columnPhoneSim);
+        setTitleToolbar("Phone with Multi-SIM");
+        setDatas(respone.data.analyticFrequencyDetail);
+      } catch (error) {
+        if (error.response) {
+          return true;
+        }
+      }
+    }
     if (tableSelect.simPhone) {
       try {
         const respone = await AnalyticService.postSimPhone(
@@ -547,9 +569,12 @@ const AnalyticView = () => {
       />
       <Divider />
       <Box border="1px solid #C8CED3" marginTop="5px" borderRadius="5px">
-        <AppTableToolbar
+        <TableToolbarView
           title={titleToolbar}
           icon={<CheckIcon fontSize="small" />}
+          handleClick={() => {
+            setOpen(true);
+          }}
         />
         <Box
           display="flex"
@@ -580,6 +605,18 @@ const AnalyticView = () => {
           detail={tableSelect.detailCall}
         />
       </Box>
+      <AppDialogFull title={"Frequency"} open={open} handleClose={handleClose}>
+        <TableView
+          pageRows={pageRows}
+          column={columnSelect}
+          page={page}
+          query={query}
+          handleChangePage={handleChangePage}
+          data={datas}
+          tableSelect={tableSelect}
+          detail={tableSelect.detailCall}
+        />
+      </AppDialogFull>
     </React.Fragment>
   );
 };

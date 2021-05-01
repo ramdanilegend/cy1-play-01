@@ -17,7 +17,7 @@ import {
   TableContainer,
   Link,
 } from "@material-ui/core";
-import DashboardService from "services/DashboardService";
+import AnalyticService from "services/AnalyticService";
 // import AnalyticService from "services/AnalyticService";
 import { makeStyles } from "@material-ui/core/styles";
 import { Skeleton } from "@material-ui/lab";
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
   tableContainer: {
     width: "100%",
-    maxHeight: 100,
+    maxHeight: 300,
     // maxWidth: 700,
     overflowX: "hidden",
     direction: "rtl",
@@ -82,13 +82,11 @@ const TableRowsView = (props) => {
     setOpen(!open);
     if (!open) {
       try {
-        const getData = await DashboardService.postDropdownDetail({
+        const respone = await AnalyticService.postDropdownCaller({
           ANumber: data.caller,
-          BNumber: data.called,
           daterangepicker: dashboardContext.state.dashboardView.daterangepicker,
-          Calltype: data.callType,
         });
-        setDataDropdown(getData.data.tabledatahits);
+        setDataDropdown(respone.data.tabledatahits);
         setTimeout(() => {
           setError(false);
         }, [500]);
@@ -198,7 +196,7 @@ const TableRowsView = (props) => {
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             {error ? (
               <Box

@@ -70,13 +70,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RowsMonthlyCall = (props) => {
+const RowsMonthlyCalled = (props) => {
   const { row, index, labelId } = props;
   const dashboardContext = React.useContext(DashboardContext);
   const [open, setOpen] = React.useState(false);
   const [dataDropdown, setDataDropdown] = React.useState([]);
   const classes = useStyles();
   const [error, setError] = React.useState(true);
+  // const [rows, setRows] = React.useState([]);
+  // React.useEffect(() => {
+  //   if (row) {
+  //     // console.log(row.caller);
+  //     setRows(row);
+  //   }
+  // }, [row]);
 
   const getDropdown = async (data) => {
     setOpen(!open);
@@ -120,12 +127,11 @@ const RowsMonthlyCall = (props) => {
         </TableCell>
         <TableCell
           component="th"
-          id={labelId}
+          id={"das"}
           scope="row"
           className={classes.cells}
-          align="right"
         >
-          {row.caller}
+          {row["caller"] ? row["caller"] : row["called"]}
         </TableCell>
         <TableCell
           component="th"
@@ -356,4 +362,4 @@ const RowsMonthlyCall = (props) => {
   );
 };
 
-export default RowsMonthlyCall;
+export default RowsMonthlyCalled;
