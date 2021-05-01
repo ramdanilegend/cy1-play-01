@@ -2,7 +2,7 @@ import React from "react";
 
 import { Box, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { AccordionView, MapView, TableView } from "./components";
+import { AccordionView, MapView } from "./components";
 import { AppTableToolbar } from "components";
 import GeoAnalyticService from "services/GeoAnalyticService";
 import DashboardContext from "context/DashboardContext";
@@ -67,7 +67,7 @@ const Movement = () => {
       <Grid item md={6}>
         <Box border="1px solid #C8CED3" borderRadius="5px">
           <AppTableToolbar title="Movement" />
-          <TableView datasTable={datas} />
+          {/* <TableView datasTable={datas} /> */}
         </Box>
       </Grid>
     </Grid>

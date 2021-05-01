@@ -2,7 +2,7 @@ import React from "react";
 
 import { Box, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { AccordionView, MapView, ToolbarView, TableView } from "./components";
+import { AccordionView, MapView, ToolbarView } from "./components";
 import { AppTableToolbar } from "components";
 import GeoAnalyticService from "services/GeoAnalyticService";
 import DashboardContext from "context/DashboardContext";
@@ -148,7 +148,7 @@ const DayNightCall = () => {
             night={filterNight}
             selected={select}
           />
-          <TableView datasTable={datas} />
+          {/* <TableView datasTable={datas} /> */}
           {/* <AccordionView data={datas} /> */}
         </Box>
       </Grid>

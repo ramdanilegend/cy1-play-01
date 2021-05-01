@@ -30,7 +30,7 @@ const Routes = () => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <Redirect to="/cdr-analytic-system" />
+          <Redirect to="/cy1-play" />
         </Route>
 
         <RouteWithLayout
@@ -100,7 +100,7 @@ const Routes = () => {
           component={SigninView}
           exact
           layout={MinimalLayout}
-          path="/cdr-analytic-system"
+          path="/cy1-play"
         />
 
         <RouteWithLayout
