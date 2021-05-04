@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   table: {
-    maxWidth: 750,
+    maxWidth: "100%",
   },
   visuallyHidden: {
     border: 0,

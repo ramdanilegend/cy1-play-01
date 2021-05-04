@@ -14,6 +14,13 @@ const columnHourlyCalled = [
     minWidth: 120,
   },
   {
+    id: "totalCall",
+    numeric: true,
+    disablePadding: true,
+    label: "TotalCall",
+    minWidth: 90,
+  },
+  {
     id: "0",
     numeric: true,
     disablePadding: true,
@@ -187,14 +194,6 @@ const columnHourlyCalled = [
     disablePadding: true,
     label: "24",
     minWidth: 20,
-  },
-
-  {
-    id: "totalCall",
-    numeric: true,
-    disablePadding: true,
-    label: "TotalCall",
-    minWidth: 90,
   },
 ];
 

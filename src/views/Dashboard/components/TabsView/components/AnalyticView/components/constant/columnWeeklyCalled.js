@@ -8,10 +8,17 @@ const columnWeeklyCalled = [
   },
   {
     id: "called",
-    numeric: true,
+    numeric: false,
     disablePadding: true,
     label: "Called",
     minWidth: 120,
+  },
+  {
+    id: "totalCall",
+    numeric: true,
+    disablePadding: true,
+    label: "TotalCall",
+    minWidth: 90,
   },
   {
     id: "1",
@@ -383,13 +390,6 @@ const columnWeeklyCalled = [
     disablePadding: true,
     label: "53",
     minWidth: 20,
-  },
-  {
-    id: "totalCall",
-    numeric: true,
-    disablePadding: true,
-    label: "TotalCall",
-    minWidth: 90,
   },
 ];
 

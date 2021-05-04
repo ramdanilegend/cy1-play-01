@@ -36,8 +36,6 @@ const MapView = ({ data, initMap }) => {
       zoom: 4,
     };
     if (data) {
-      console.log(initMap);
-      console.log(data);
       setDatas({
         ...datas,
         center: {
@@ -51,6 +49,7 @@ const MapView = ({ data, initMap }) => {
           const map = new window.google.maps.Map(mapRef.current, initMap);
           const infowindow = new window.google.maps.InfoWindow();
           let polyLine = [];
+          let sortLine = [];
           data.map((value, i) => {
             const marker = new window.google.maps.Marker({
               position: {
@@ -60,8 +59,13 @@ const MapView = ({ data, initMap }) => {
               map,
               title: "Hello World!",
             });
-            if (value.Alatitude && value.Alongitude) {
-              polyLine.push({
+            if (value.Alatitude != null && value.Alongitude != null) {
+              // polyLine.push({
+              //   lat: parseFloat(value.Alatitude),
+              //   lng: parseFloat(value.Alongitude),
+              // });
+              sortLine.push({
+                sortDate: `${value.callDate}-${value.callTime}`,
                 lat: parseFloat(value.Alatitude),
                 lng: parseFloat(value.Alongitude),
               });
@@ -79,6 +83,24 @@ const MapView = ({ data, initMap }) => {
               );
             }
           });
+          function compare(a, b) {
+            if (a.sortDate < b.sortDate) {
+              return -1;
+            }
+            if (a.sortDate > b.sortDate) {
+              return 1;
+            }
+            return 0;
+          }
+          sortLine.sort(compare);
+          sortLine.map((value) => {
+            polyLine.push({
+              lat: value.lat,
+              lng: value.lng,
+            });
+          });
+          console.log(polyLine);
+          console.log(sortLine);
           const line = new window.google.maps.Polyline({
             path: polyLine,
             geodesic: true,

@@ -43,6 +43,7 @@ function AppDialogBasic(props) {
       aria-labelledby="customized-dialog-title"
       open={open}
       maxWidth={maxWidth}
+      fullWidth
     >
       <MuiDialogTitle
         id="customized-dialog-title"

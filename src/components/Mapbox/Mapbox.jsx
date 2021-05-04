@@ -1,125 +1,107 @@
-import React, { Component } from "react";
-import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { setIn } from "formik";
+import { Loader } from "@googlemaps/js-api-loader";
 import { apiGoogleMap } from "config.json";
-import Geocode from "react-geocode";
-
-Geocode.setApiKey(apiGoogleMap);
-Geocode.setLanguage("id");
-Geocode.setRegion("id");
+import { useFormikContext } from "formik";
+import { Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   map: {
     position: "absolute",
-    top: "35px",
+    top: 0,
     right: 0,
     left: 0,
     bottom: 0,
   },
+  mapHeader: {},
 }));
 
-const mapStyles = {
-  position: "absolute",
-  top: "15px",
-  right: 0,
-  left: 0,
-  bottom: 0,
-};
-
-export function MapContainer(props) {
+function MapBox({ address, setAutoValue, setMapHeader }) {
   const classes = useStyles();
-  const [activeMarker, setActiveMarker] = React.useState({});
-  const [selectedPlace, setPlace] = React.useState({});
-  const [showingInfoWindow, setInfo] = React.useState(false);
-  const [markerLocation, setMarkerLocation] = React.useState({
-    lat: -1.2884,
-    lng: 36.8233,
-  });
-  const onMarkerClick = (props, marker, e) => {
-    setActiveMarker(marker);
-    setPlace(props);
-    setInfo(true);
-  };
+  const mapRef = React.useRef();
+  const { setFieldValue } = useFormikContext();
 
-  const onClose = (props) => {
-    if (showingInfoWindow) {
-      setActiveMarker(null);
-      setInfo(true);
-    }
-  };
-  Geocode.fromLatLng("48.8583701", "2.2922926").then(
-    (response) => {
-      const address = response.results[0].formatted_address;
-      console.log(address);
+  const [initMap, setInitMap] = React.useState({
+    center: {
+      lat: -2.43171,
+      lng: 115.487867,
     },
-    (error) => {
-      console.error(error);
-    }
-  );
-  Geocode.fromAddress("Komplek Griya Bandung Indah").then(
-    (response) => {
-      const { lat, lng } = response.results[0].geometry.location;
-      console.log(lat, lng);
-    },
-    (error) => {
-      console.error(error);
-    }
-  );
-  const onMapClick = (mapProps, map, clickEvent) => {
-    setMarkerLocation({
-      ...markerLocation,
-      lat: clickEvent.latLng.lat(),
-      lng: clickEvent.latLng.lng(),
-    });
-  };
-  let geocoder;
-  let map;
-  function initialize() {
-    geocoder = new props.google.maps.Geocoder();
-    const latlng = new props.google.maps.LatLng(-34.397, 150.644);
-    var mapOptions = {
-      zoom: 8,
-      center: latlng,
-    };
-    // map = new google.maps.Map(document.getElementById('map'), mapOptions);
-  }
+    zoom: 4,
+    controlSize: 25,
+  });
+  const loader = new Loader({
+    apiKey: apiGoogleMap,
+    version: "weekly",
+    libraries: ["geometry", "places"],
+  });
+
+  React.useEffect(() => {
+    loader
+      .load()
+      .then(() => {
+        const geocoder = new window.google.maps.Geocoder();
+        const map = new window.google.maps.Map(mapRef.current, initMap);
+        const marker = new window.google.maps.Marker({
+          map,
+        });
+        map.addListener("click", (e) => {
+          marker.setPosition(e.latLng);
+          setMapHeader(`${e.latLng.toJSON().lng},${e.latLng.toJSON().lat}`);
+          setFieldValue(
+            "longlat",
+            `${e.latLng.toJSON().lng},${e.latLng.toJSON().lat}`
+          );
+          geocoder.geocode({ latLng: e.latLng }, (results, status) => {
+            if (status === "OK") {
+              if (results[0]) {
+                setAutoValue(results[0].formatted_address);
+                setFieldValue(
+                  "location_address",
+                  `${results[0].formatted_address}`
+                );
+              } else {
+                window.alert("No results found");
+              }
+            } else {
+              window.alert("Geocoder failed due to: " + status);
+            }
+          });
+        });
+        if (address) {
+          geocoder.geocode({ address: address }, function (results, status) {
+            if (status == "OK") {
+              map.setCenter(results[0].geometry.location);
+              map.setZoom(15);
+              setMapHeader(
+                `${results[0].geometry.location.toJSON().lng},${
+                  results[0].geometry.location.toJSON().lat
+                }`
+              );
+              setFieldValue("location_address", address);
+              setFieldValue(
+                "longlat",
+                `${results[0].geometry.location.toJSON().lng},${
+                  results[0].geometry.location.toJSON().lat
+                }`
+              );
+              marker.setPosition(results[0].geometry.location);
+              marker.setPosition(results[0].geometry.location);
+            } else {
+              alert(
+                "Geocode was not successful for the following reason: " + status
+              );
+            }
+          });
+        }
+      })
+      .catch((e) => {});
+  }, [address]);
 
   return (
-    <div>
-      <div className="map-bar-container">
-        <div className="map-bar">{`${markerLocation.lat},${markerLocation.lng}`}</div>
-      </div>
-      <Map
-        google={props.google}
-        zoom={14}
-        style={mapStyles}
-        initialCenter={{
-          lat: -1.2884,
-          lng: 36.8233,
-        }}
-        onClick={onMapClick}
-      >
-        <Marker
-          onClick={onMarkerClick}
-          name={"SOMA"}
-          style={{ color: "#000000", backgroundColor: "#ffffff" }}
-          position={markerLocation}
-        />
-        <InfoWindow
-          marker={activeMarker}
-          visible={showingInfoWindow}
-          onClose={onClose}
-        >
-          <div>
-            <h4>{selectedPlace.name}</h4>
-          </div>
-        </InfoWindow>
-      </Map>
-    </div>
+    <React.Fragment>
+      <div ref={mapRef} className={classes.map}></div>
+    </React.Fragment>
   );
 }
 
-export default GoogleApiWrapper({
-  apiKey: apiGoogleMap,
-})(MapContainer);
+export default MapBox;

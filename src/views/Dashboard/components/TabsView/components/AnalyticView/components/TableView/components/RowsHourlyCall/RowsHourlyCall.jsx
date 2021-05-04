@@ -81,18 +81,42 @@ const RowsHourlyCall = (props) => {
   const getDropdown = async (data) => {
     setOpen(!open);
     if (!open) {
-      try {
-        const respone = await AnalyticService.postDropdownCaller({
-          ANumber: caller ? data.caller : data.called,
-          daterangepicker: dashboardContext.state.dashboardView.daterangepicker,
-        });
-        setDataDropdown(respone.data.tabledatahits);
-        setTimeout(() => {
-          setError(false);
-        }, [500]);
-      } catch (error) {
-        setError(true);
-        console.log(error);
+      if (caller) {
+        try {
+          const respone = await AnalyticService.postDropdownCaller({
+            ANumber: data.caller,
+            daterangepicker:
+              dashboardContext.state.dashboardView.daterangepicker,
+          });
+          setDataDropdown(respone.data.tabledatahits);
+          setTimeout(() => {
+            setError(false);
+          }, [500]);
+        } catch (error) {
+          // setError(true);
+          if (error.response) {
+            return true;
+          }
+          // console.log(error);
+        }
+      } else {
+        try {
+          const respone = await AnalyticService.postDropdownCalled({
+            BNumber: data.called,
+            daterangepicker:
+              dashboardContext.state.dashboardView.daterangepicker,
+          });
+          setDataDropdown(respone.data.tabledatahits);
+          setTimeout(() => {
+            setError(false);
+          }, [500]);
+        } catch (error) {
+          // setError(true);
+          if (error.response) {
+            return true;
+          }
+          // console.log(error);
+        }
       }
     }
   };

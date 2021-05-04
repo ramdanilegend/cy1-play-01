@@ -110,6 +110,18 @@ export function postHourlyImeiCalled(data) {
     daterangepicker: data.daterangepicker,
   });
 }
+export function postDropdownImeiCaller(data) {
+  return http.post(apiUrl + "/breakdownByNumber", {
+    AImei: data.AImei,
+    daterangepicker: data.daterangepicker,
+  });
+}
+export function postDropdownImeiCalled(data) {
+  return http.post(apiUrl + "/breakdownByNumber", {
+    BImei: data.BImei,
+    daterangepicker: data.daterangepicker,
+  });
+}
 
 //Phone
 export function postPhoneSim(data) {
@@ -147,6 +159,8 @@ const AnalyticService = {
   postHourlyImeiCaller,
   postDetailImeiCalled,
   postHourlyImeiCalled,
+  postDropdownImeiCaller,
+  postDropdownImeiCalled,
 
   //phone
   postPhoneSim,

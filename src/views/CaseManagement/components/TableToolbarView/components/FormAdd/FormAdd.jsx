@@ -25,23 +25,19 @@ import { Mapbox } from "components";
 import { Autocomplete } from "@material-ui/lab";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { apiGoogleMap } from "config.json";
+import { MapAutocomplete } from "components";
 
 const CaseSchema = Yup.object().shape({
-  case_name: Yup.string()
-    .min(3, "Minimal 3 Character")
-    .max(30, "Maxsimal 30 Character")
-    .required("Required"),
+  case_name: Yup.string().max(30, "Maxsimal 30 Character").required("Required"),
   letter_number: Yup.string()
-    .min(3, "Minimal 3 Character")
     .max(30, "Maxsimal 30 Character")
     .required("Required"),
-  // clause_reference: Yup.string().required(),
+  clause_reference: Yup.string().required("required"),
   description: Yup.string()
-    .min(3, "Minimal 3 Character")
     .max(254, "Maxsimal 254 Character")
     .required("Required"),
-  // longlat: Yup.string().required(),
-  location_address: Yup.string().required(),
+  longlat: Yup.string().required("Required"),
+  location_address: Yup.string().required("Required"),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -54,6 +50,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#D82058",
     color: "#FFFFFF",
     minWidth: "110px",
+  },
+  mapHeader: {
+    borderRadius: "4px",
+    padding: "0 10px",
+    height: "23px",
+    display: "flex",
+    backgroundColor: "#F0F3F5",
+    alignItems: "center",
   },
 }));
 
@@ -77,32 +81,6 @@ const pasals = [
   "126 KUHP (2))",
 ];
 
-// const MyInput = () => {
-//   return (
-//     <Autocomplete
-//       value={option}
-//       onChange={(event, newValue) => {
-//         setOption(newValue);
-//       }}
-//       inputValue={inputValue}
-//       onInputChange={(event, newInputValue) => {
-//         setInputValue(newInputValue);
-//       }}
-//       id="controllable-states-demo"
-//       options={pasals}
-//       style={{ width: 300 }}
-//       renderInput={(params) => (
-//         <TextField
-//           {...params}
-//           name="clause_reference"
-//           // label="Controllable"
-//           variant="outlined"
-//         />
-//       )}
-//     />
-//   );
-// };
-
 const FormAdd = (props) => {
   const { handleClose } = props;
   const classes = useStyles();
@@ -110,11 +88,19 @@ const FormAdd = (props) => {
   const userContext = React.useContext(CaseContext);
   const [showPassword, setShowPassword] = React.useState(false);
   const [option, setOption] = React.useState(pasals[0]);
+  const [dataMap, setDataMap] = React.useState({ value: null });
+  const [longLat, setLongLat] = React.useState("long,lat");
+  const [options, setOptions] = React.useState([]);
   // const [inputValue, setInputValue] = React.useState("");
   const [location, setLocation] = React.useState({
     lng: 106.84513,
     lat: -6.21462,
   });
+  // const { setFieldValue } = useFormikContext();
+
+  const setOptionAuto = (value) => {
+    setOptions(value);
+  };
   function getLocation() {
     navigator.geolocation.getCurrentPosition(
       function (position) {
@@ -123,7 +109,6 @@ const FormAdd = (props) => {
           lng: position.coords.longitude,
           lat: position.coords.latitude,
         });
-        console.log(position.coords.longitude);
       },
       function (error) {
         setLocation({
@@ -133,6 +118,15 @@ const FormAdd = (props) => {
       }
     );
   }
+
+  const onMapAutocompleteChange = (event, newValue) => {
+    setOptions(newValue ? [newValue, ...options] : options);
+    setDataMap({ ...dataMap, value: newValue });
+    console.log(newValue);
+  };
+  const setAutoValue = (newValue) => {
+    setDataMap({ ...dataMap, value: newValue });
+  };
   React.useEffect(() => {
     getLocation();
   }, []);
@@ -142,6 +136,9 @@ const FormAdd = (props) => {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+  const setMapHeader = (value) => {
+    setLongLat(value);
   };
 
   return (
@@ -153,7 +150,7 @@ const FormAdd = (props) => {
             letter_number: "",
             clause_reference: "",
             description: "",
-            longlat: `${location.lng},${location.lat}`,
+            longlat: ``,
             location_address: "",
           }}
           validationSchema={CaseSchema}
@@ -183,7 +180,7 @@ const FormAdd = (props) => {
                 letter_number: "",
                 clause_reference: "",
                 description: "",
-                longlat: `${location.lng},${location.lat}`,
+                longlat: ``,
                 location_address: "",
               },
             });
@@ -203,12 +200,13 @@ const FormAdd = (props) => {
             <form onSubmit={handleSubmit} autoComplete="off">
               <Grid container spacing={3}>
                 <Grid item md={6} lg={6} xs={12}>
+                  <Box marginTop="23px" />
                   <Box
                     display="flex"
                     flexDirection="column"
                     // justifyContent="space-between"
                     width="100%"
-                    height="250px"
+                    height="215px"
                   >
                     Case Name
                     <TextField
@@ -249,6 +247,7 @@ const FormAdd = (props) => {
                     />
                     <Box marginTop="10px" />
                     Case Clause Reference
+                    <Box marginTop="6px" />
                     <Autocomplete
                       value={option}
                       onChange={(event, newValue) => {
@@ -260,10 +259,12 @@ const FormAdd = (props) => {
                       }}
                       id="controllable-states-demo"
                       options={pasals}
-                      style={{ width: 300 }}
+                      // style={{ width: 300 }}
                       renderInput={(params) => (
                         <TextField
                           {...params}
+                          error={errors.clause_reference ? true : false}
+                          fullWidth
                           // label="Controllable"
                           variant="outlined"
                         />
@@ -272,37 +273,52 @@ const FormAdd = (props) => {
                   </Box>
                   <Box marginTop="10px" />
                   Case Description
-                  <TextField
-                    type="text"
-                    name="description"
-                    variant="outlined"
-                    size="small"
-                    error={errors.description ? true : false}
-                    helperText={
-                      errors.description && touched.description
-                        ? `${errors.description}`
-                        : null
-                    }
-                    placeholder="Enter Description"
-                    onChange={handleChange}
-                    // onBlur={handleBlur}
-                    value={values.description}
-                    fullWidth
-                  />
+                  <Box marginTop="10px">
+                    <TextField
+                      type="text"
+                      name="description"
+                      variant="outlined"
+                      size="small"
+                      error={errors.description ? true : false}
+                      helperText={
+                        errors.description && touched.description
+                          ? `${errors.description}`
+                          : null
+                      }
+                      multiline
+                      rows={5}
+                      placeholder="Enter Description"
+                      onChange={handleChange}
+                      // onBlur={handleBlur}
+                      value={values.description}
+                      fullWidth
+                    />
+                  </Box>
                 </Grid>
                 <Grid item md={6} lg={6} xs={12}>
+                  <div className={classes.mapHeader}>{longLat}</div>
                   <Box
                     position="relative"
                     width="100%"
                     height="215px"
                     marginBottom="10px"
                   >
-                    <Wrapper apiKey={apiGoogleMap}>
-                      <Mapbox lngUser={location.lng} latUser={location.lat} />
-                    </Wrapper>
+                    <Mapbox
+                      setMapHeader={setMapHeader}
+                      setAutoValue={setAutoValue}
+                      address={dataMap.value ? dataMap.value.description : null}
+                    />
                   </Box>
                   Case Location Address
-                  <TextField
+                  <Box marginTop="10px">
+                    <MapAutocomplete
+                      value={dataMap.value}
+                      onMapAutocompleteChange={onMapAutocompleteChange}
+                      setOptionAuto={setOptionAuto}
+                      options={options}
+                    />
+                  </Box>
+                  {/* <TextField
                     type="text"
                     name="location_address"
                     variant="outlined"
@@ -312,7 +328,7 @@ const FormAdd = (props) => {
                     // onBlur={handleBlur}
                     value={values.location_address}
                     fullWidth
-                  />
+                  /> */}
                 </Grid>
               </Grid>
               <Box marginTop="10px" />

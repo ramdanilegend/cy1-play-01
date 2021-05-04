@@ -23,7 +23,7 @@ const FrequencyChart = () => {
 
   const series = chart.line(dataLine);
   series.normal().stroke("#00cc99", 1, "10 5", "round");
-  series.xMode("scatter");
+  // series.xMode("scatter");
   chart.xAxis().staggerMode(true);
 
   chart.crosshair().enabled(true).yLabel(false).yStroke(null);
@@ -34,21 +34,23 @@ const FrequencyChart = () => {
     );
   React.useEffect(() => {
     let dataChart = [];
+
     if (data) {
       if (data.length > 10) {
-        data.sort((a, b) => {
+        const a = data.sort((a, b) => {
           return b.totalCall - a.totalCall;
         });
+        console.log(a);
         let dataTopTen = data.slice(0, 10);
-        dataTopTen.sort((a, b) => {
+        const b = dataTopTen.sort((a, b) => {
           return a.totalCall - b.totalCall;
         });
-        dataTopTen.map((value) => {
+        console.log(b);
+        b.map((value) => {
           dataChart.push([value.called, value.totalCall]);
         });
-        dataChart.sort((a, b) => {
-          return a[1] - b[1];
-        });
+        console.log(dataChart);
+
         setDataLine(dataChart);
 
         // console.log(dataLine);

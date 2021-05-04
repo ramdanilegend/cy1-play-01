@@ -8,10 +8,17 @@ const columnHourlyImei = [
   },
   {
     id: "called",
-    numeric: true,
+    numeric: false,
     disablePadding: true,
     label: "Caller Imei",
     minWidth: 120,
+  },
+  {
+    id: "totalCall",
+    numeric: true,
+    disablePadding: true,
+    label: "TotalCall",
+    minWidth: 90,
   },
   {
     id: "0",
@@ -187,14 +194,6 @@ const columnHourlyImei = [
     disablePadding: true,
     label: "24",
     minWidth: 20,
-  },
-
-  {
-    id: "totalCall",
-    numeric: true,
-    disablePadding: true,
-    label: "TotalCall",
-    minWidth: 90,
   },
 ];
 
